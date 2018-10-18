@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 var carsRouter = require('./routes/cars');
 var createAdRouter = require('./routes/create-ad.js');
 var registrationRouter = require('./routes/registration.js');
+var loginRouter = require('./routes/login.js');
 
 var app = express();
 
@@ -35,6 +36,8 @@ app.use('/cars', carsRouter);
 // app.use('/create-ad', createAdRouter);
 app.use('/registration', registrationRouter);
 app.use('/register', registrationRouter);
+app.use('/login', loginRouter);
+app.use('/signin', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
