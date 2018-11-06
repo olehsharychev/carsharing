@@ -13,6 +13,7 @@ con.query("SELECT * FROM ad", function (err, result, fields) {
 
 router.get('/', function(req, res, next) {
     res.render('cars', {carsList: carsList});
+    console.log(carsList);
 });
 
 module.exports = router;

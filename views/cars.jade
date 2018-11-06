@@ -1,9 +1,14 @@
-div
-    - var i = 0;
-    - carsList.forEach(function() {
-        p= carsList[i].id
-        p= carsList[i].number1
-        p= carsList[i].number2
-        p= carsList[i].text
+extends layout
+block cars-block
+    div
+        - var i = 0;
+        - carsList.forEach(function() {
+        div(class="cars-list")
+            div(class="cars-list__item")
+                a(href="/cars/#{i + 1}")
+                    h3= carsList[i].ad_tittle
+                p= carsList[i].ad_description
+                p= carsList[i].car_brand
+                p= carsList[i].car_model
         - i++;
-    - });
+        - });

@@ -8,7 +8,7 @@ var sassMiddleware = require('node-sass-middleware');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var carsRouter = require('./routes/cars');
-var createAdRouter = require('./routes/create-ad.js');
+var createAdRouter = require('./routes/create-ad');
 var registrationRouter = require('./routes/registration.js');
 var loginRouter = require('./routes/login.js');
 
@@ -33,7 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/cars', carsRouter);
-// app.use('/create-ad', createAdRouter);
+app.use('/create-ad', createAdRouter);
+app.use('/create', createAdRouter);
 app.use('/registration', registrationRouter);
 app.use('/register', registrationRouter);
 app.use('/login', loginRouter);
