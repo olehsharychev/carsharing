@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
-var con = require('../connect/connection.js');
+var con = require('../lib/connection.js');
 
 const saltRounds = 10;
 

@@ -4,6 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
+var flash = require('connect-flash');
+// var bcrypt = require('bcrypt');
+var crypto = require('crypto');
+var passport = require('passport');
+var localStrategy = require('passport-local').Strategy;
+var connection = require('./lib/connection');
+var session = require('express-session');
+var store = require('express-session').Store;
+var betterMemoryStore = require('session-memory-store')(session);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -30,6 +39,97 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+var store = new betterMemoryStore({expires: 60 * 60 * 1000, debug: true});
+app.use(session({
+    name: 'JSESSION',
+    secret: 'carsharing_secret',
+    store: store,
+    resave: true,
+    saveUninitialized: true
+}));
+
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use('local', new localStrategy({
+
+        usernameField: 'login',
+
+        passwordField: 'password',
+
+        passReqToCallback: true
+    }, function (req, login, password, done) {
+
+
+        if (!login || !password) {
+            return done(null, false, req.flash('message', 'All fields are required.'));
+        }
+
+        var salt = '7fa73b47df808d36c5fe328546ddef8b9011b2c6';
+
+        connection.query("select * from user where user_login = ?", [login], function (err, rows) {
+
+            console.log(err);
+            console.log(rows);
+
+            if (err) return done(req.flash('message', err));
+
+            if (!rows.length) {
+                return done(null, false, req.flash('message', 'Invalid username or password.'));
+            }
+
+            salt = salt + '' + password;
+
+            var encPassword = crypto.createHash('sha1').update(salt).digest('hex');
+
+
+            var dbPassword = rows[0].user_password;
+
+            console.log(encPassword);
+            console.log(dbPassword);
+
+            if (!(dbPassword == encPassword)) {
+                console.log('error');
+                return done(null, false, req.flash('message', 'Invalid username or password.'));
+
+            }
+
+            console.log('done');
+            return done(null, rows[0]);
+
+        });
+
+    }
+));
+passport.serializeUser(function (user, done) {
+    done(null, user.user_id);
+});
+
+passport.deserializeUser(function (id, done) {
+    connection.query("select * from user where user_id = " + id, function (err, rows) {
+        done(err, rows[0]);
+    });
+});
+
+app.get('/login', function(req, res){
+    res.render('login',{'message' :req.flash('message')});
+});
+
+app.post("/signin", passport.authenticate('local', {
+
+    successRedirect: '/cars',
+
+    failureRedirect: '/login',
+
+    failureFlash: true
+
+}), function(req, res, info){
+
+    res.render('login',{'message' :req.flash('message')});
+
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/cars', carsRouter);
@@ -37,8 +137,8 @@ app.use('/create-ad', createAdRouter);
 app.use('/create', createAdRouter);
 app.use('/registration', registrationRouter);
 app.use('/register', registrationRouter);
-app.use('/login', loginRouter);
-app.use('/signin', loginRouter);
+// app.use('/login', loginRouter);
+// app.use('/signin', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

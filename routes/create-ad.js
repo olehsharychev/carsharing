@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var con = require('../connect/connection.js');
+var con = require('../lib/connection.js');
 
 router.get('/', function (req, res, next) {
     res.render('create-ad');
