@@ -30,7 +30,7 @@ router.post('/', upload.array('carPhoto', 10), function (req, res) {
                 '2018-10-29',
                 '0',
                 '${req.body.price}',
-                '7', 
+                ${req.user.user_id}, 
                 '${req.body.brand}',
                 '${req.body.model}',
                 '${req.body.engine}',

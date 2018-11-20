@@ -5,28 +5,49 @@ body
 a
   color: #00B7FF
 
+div
+  box-sizing: border-box
+
 .navbar
   display: flex
   justify-content: space-between
   width: 50%
 
-.cars-list
+.cars-wrapper
+  .ad-list
 
-  &__item
-    margin-top: 10px
-    background: #878486
+    &__item
+      display: flex
+      flex-direction: row
+      justify-content: flex-start
+      margin-top: 10px
+      border: 1px solid #6b6a78
+      -webkit-border-radius: 5px
+      -moz-border-radius: 5px
+      border-radius: 5px
 
-div
-  box-sizing: border-box
+      .photo
+        align-self: center
+        height: 150px
+        margin-left: 40px
+
+      .info
+        display: flex
+        flex-direction: column
+        align-items: flex-start
+        margin-left: 40px
+
+
 
 .view-main-wrapper
+  margin-top: 30px
+
   .wrapper
     display: flex
     justify-content: space-between
     width: 90%
 
     .slider
-      margin-top: 50px
       width: 600px
       height: 400px
 
@@ -48,5 +69,5 @@ div
           width: 100%
 
   .description
-    margin-top: 30px
+    margin-top: 50px
     text-align: center
