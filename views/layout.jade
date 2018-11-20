@@ -2,10 +2,12 @@ doctype html
 html
     head
         link(rel="stylesheet", href="/stylesheets/style.css")
+        link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css")
     body
         header
             div.navbar
+                a(href="/cars") На главную
                 a(href="/login") Вход
                 a(href="/registration") Регистрация
                 a(href="/create-ad") Создать объявление
-        block cars-block
+        block content

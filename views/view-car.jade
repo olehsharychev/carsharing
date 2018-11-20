@@ -1,0 +1,38 @@
+extends layout
+block content
+    div.view-main-wrapper
+        div.wrapper
+            div.slider
+                - var i = 0;
+                - car.forEach(function() {
+                img(src="/uploads/#{car[i].image_path}")
+                - i++;
+                - });
+            div.data-wrapper
+                h3= car[0].ad_tittle
+                div.list
+                    div.list__item
+                        p Производитель
+                        p= car[0].car_brand
+                    div.list__item
+                        p Модель
+                        p= car[0].car_model
+                    div.list__item
+                        p Объем двигателя (литры)
+                        p= car[0].car_engine
+                    div.list__item
+                        p Мощность двигателя
+                        p= car[0].car_power
+                    div.list__item
+                        p Год выпуска
+                        p= car[0].car_year
+                    div.list__item
+                        p Пробег
+                        p= car[0].car_mileage
+        div.description
+            p= car[0].ad_description
+
+
+    script(src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous")
+    script(type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js")
+    script(type="text/javascript" src="/javascripts/view-car.js")

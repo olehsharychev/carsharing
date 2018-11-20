@@ -1,14 +1,15 @@
 extends layout
-block cars-block
+block content
     div
         - var i = 0;
-        - carsList.forEach(function() {
-        div(class="cars-list")
-            div(class="cars-list__item")
-                a(href="/cars/#{i + 1}")
-                    h3= carsList[i].ad_tittle
-                p= carsList[i].ad_description
-                p= carsList[i].car_brand
-                p= carsList[i].car_model
+        - adList.forEach(function() {
+        div(class="ad-list")
+            div(class="ad-list__item")
+                img(src="/uploads/")
+                a(href="/cars/view-car/#{adList[i].ad_id}")
+                    h3= adList[i].ad_tittle
+                p= adList[i].ad_description
+                p= adList[i].car_brand
+                p= adList[i].car_model
         - i++;
         - });

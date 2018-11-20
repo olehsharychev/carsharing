@@ -13,6 +13,8 @@ var connection = require('./lib/connection');
 var session = require('express-session');
 var store = require('express-session').Store;
 var betterMemoryStore = require('session-memory-store')(session);
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -20,6 +22,8 @@ var carsRouter = require('./routes/cars');
 var createAdRouter = require('./routes/create-ad');
 var registrationRouter = require('./routes/registration.js');
 var loginRouter = require('./routes/login.js');
+var viewCarRouter = require('./routes/view-car');
+
 
 var app = express();
 
@@ -70,9 +74,6 @@ passport.use('local', new localStrategy({
 
         connection.query("select * from user where user_login = ?", [login], function (err, rows) {
 
-            console.log(err);
-            console.log(rows);
-
             if (err) return done(req.flash('message', err));
 
             if (!rows.length) {
@@ -86,8 +87,6 @@ passport.use('local', new localStrategy({
 
             var dbPassword = rows[0].user_password;
 
-            console.log(encPassword);
-            console.log(dbPassword);
 
             if (!(dbPassword == encPassword)) {
                 console.log('error');
@@ -95,7 +94,6 @@ passport.use('local', new localStrategy({
 
             }
 
-            console.log('done');
             return done(null, rows[0]);
 
         });
@@ -137,6 +135,8 @@ app.use('/create-ad', createAdRouter);
 app.use('/create', createAdRouter);
 app.use('/registration', registrationRouter);
 app.use('/register', registrationRouter);
+app.use('/cars/view-car', viewCarRouter);
+
 // app.use('/login', loginRouter);
 // app.use('/signin', loginRouter);
 

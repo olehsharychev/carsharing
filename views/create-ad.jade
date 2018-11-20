@@ -1,39 +1,44 @@
-form(action="/create" method="POST")
-    pre Enter tittle
-    br
-    input(type="text", name="tittle")
-    br
-    pre Enter description
-    br
-    input(type="text", name="description")
-    br
-    pre Enter price
-    br
-    input(type="number", name="price")
-    br
-    pre Enter car brand
-    br
-    input(type="text", name="brand")
-    br
-    pre Enter car model
-    br
-    input(type="text", name="model")
-    br
-    pre Enter car engine liters
-    br
-    input(type="number", name="engine")
-    br
-    pre Enter car engine power
-    br
-    input(type="number", name="power")
-    br
-    pre Enter car year
-    br
-    input(type="number", name="year")
-    br
-    pre Enter car mileage
-    br
-    input(type="number", name="mileage")
-    br
-    input(type="submit", name="submit")
+extends layout
+block content
+    form(action="/create" method="POST" enctype="multipart/form-data")
+        pre Choose some photos (max 10)
+        input(type="file", name="carPhoto", multiple, required)
+        br
+        pre Enter tittle
+        br
+        input(type="text", name="tittle", required)
+        br
+        pre Enter description
+        br
+        input(type="text", name="description", required)
+        br
+        pre Enter price
+        br
+        input(type="number", name="price", required)
+        br
+        pre Enter car brand
+        br
+        input(type="text", name="brand", required)
+        br
+        pre Enter car model
+        br
+        input(type="text", name="model", required)
+        br
+        pre Enter car engine liters
+        br
+        input(type="number", name="engine", required)
+        br
+        pre Enter car engine power
+        br
+        input(type="number", name="power", required)
+        br
+        pre Enter car year
+        br
+        input(type="number", name="year", required)
+        br
+        pre Enter car mileage
+        br
+        input(type="number", name="mileage", required)
+        br
+        input(type="submit", name="submit", required)
 
