@@ -4,11 +4,15 @@ block content
         div.wrapper
             div.slider
                 - var i = 0;
-                - car.forEach(function() {
-                img(src="/uploads/#{car[i].image_path}")
-                - i++;
+                - car[1].images.forEach(function(item) {
+                    img(src="/uploads/#{item.image_path}")
+                    - i++;
                 - });
             div.data-wrapper
+                - if (car[0].ad_author_id == car[0].user_id) {
+                    a(href="/cars/edit-car/#{car[0].ad_id}") Редактировать объявление
+                - };
+
                 h3= car[0].ad_tittle
                 div.list
                     div.list__item
@@ -31,6 +35,53 @@ block content
                         p= car[0].car_mileage
         div.description
             p= car[0].ad_description
+
+        div.bids-header
+            h3 Заявки
+            - if (car[2].bids.map(function(item) {return item.bid_author_id; }).indexOf(car[0].user_id) === -1){
+                - if (car[0].user_role_id == 2 || car[0].user_role_id == 1){
+                    form(action="/cars/view-car/send-bid/#{car[0].ad_id}", method="POST")
+                        p Комментарий к заявке:
+                        br
+                        input(type="text" name="bidDescription")
+                        br
+                        p Предлагаемая цена:
+                        br
+                        input(type="number" name="bidPrice")
+                        br
+                        input(type="submit" value="Отправить")
+                - }
+            - }
+            //a(href="/cars/view-car/send-bid/#{car[0].ad_id}") Оставить заявку
+        div.bids-wrapper
+            - var confirmedExist = car[2].bids.map(function(item) {return item.bid_confirmed; }).indexOf(1);
+            - car[2].bids.forEach(function(item) {
+                div.bid
+                    div.bid__author
+                        p= item.user_login
+                    div.bid__description
+                        p= item.bid_description
+                    div.bid__price
+                        p= item.bid_price
+                    div.bid__datetime
+                    div
+                        // автор заявки может ее удалить
+                        - if (car[0].user_id == item.bid_author_id){
+                            a(href="/cars/view-car/#{car[0].ad_id}/delete-bid/#{item.bid_id}") Удалить
+                            br
+                        - }
+                        // только автор объявления может подтверждать заявки и все заявки не подтверждены
+                        - if (car[0].ad_author_id == car[0].user_id && item.bid_confirmed == 0 && confirmedExist == -1) {
+                            a(href="/cars/view-car/#{car[0].ad_id}/confirm-bid/#{item.bid_id}") Подтвердить
+                            br
+                        - }
+                        // если заявка подтверждена автором объявления, то арендатор может оплатить
+                        - if (car[0].user_id == item.bid_author_id && item.bid_confirmed == 1) {
+                            a(href="/cars/payment/#{car[0].ad_id}") Оплатить
+                            br
+                        - }
+            - });
+
 
 
     script(src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous")

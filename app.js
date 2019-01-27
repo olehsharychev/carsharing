@@ -114,6 +114,11 @@ app.get('/login', function(req, res){
     res.render('login',{'message' :req.flash('message')});
 });
 
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/cars');
+});
+
 app.post("/signin", passport.authenticate('local', {
 
     successRedirect: '/cars',
@@ -125,7 +130,6 @@ app.post("/signin", passport.authenticate('local', {
 }), function(req, res, info){
 
     res.render('login',{'message' :req.flash('message')});
-
 });
 
 app.use('/', indexRouter);
