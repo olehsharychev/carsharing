@@ -56,7 +56,7 @@ router.get('/:ad_id/delete-bid/:bid_id', authentication, function(req, res, next
         if (err) throw err;
 
         if (result.length) {
-            if (result && req.user.user_id == result[0].bid_author_id) {
+            if (req.user.user_id == result[0].bid_author_id) {
                 var deleteQuery = `DELETE FROM bid WHERE bid_id = ${bidId}`;
                 con.query(deleteQuery, function (err, result) {
 
