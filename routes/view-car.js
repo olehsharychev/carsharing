@@ -24,13 +24,13 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             var car = result;
             car[0].user_id = req.user.user_id;
             car[0].user_role_id = req.user.user_role_id;
-            // console.log(car);
+
             var imageQuery = `SELECT * FROM image WHERE ad_id = ${adId}`;
             con.query(imageQuery, function (err, result, fields){
                 if (err) throw err;
                 if (result) {
                     car[car.length] = {images: result};
-                    // console.log(car);
+
                     var bidQuery = `SELECT * from bid
                                     left join user on user.user_id = bid.bid_author_id
                                     where bid.ad_id = ${adId}`;
@@ -38,35 +38,67 @@ router.get('/:ad_id', authentication, function(req, res, next) {
                         if (err) throw err;
                         if (result){
                             car[car.length] = {bids: result};
-                            console.log("************");
-                            // console.log(car);
-                            // console.log(car[2].bids);
                             res.render('view-car', {car: car});
                         }
                     });
                 }
             });
-            // res.render('view-car', {car: car});
         }
     });
 });
 
 router.get('/:ad_id/delete-bid/:bid_id', authentication, function(req, res, next){
 
-    var query = `DELETE FROM bid WHERE bid_id = ${req.params.bid_id}`;
-    con.query(query, function (err, result) {
+    var bidId = req.params.bid_id;
+    var bidAuthorQuery = `SELECT bid_author_id FROM bid WHERE bid_id = ${bidId}`;
+    con.query(bidAuthorQuery, function (err, result) {
+
         if (err) throw err;
-        res.redirect(`/cars/view-car/${req.params.ad_id}`);
+
+        if (result.length) {
+            if (result && req.user.user_id == result[0].bid_author_id) {
+                var deleteQuery = `DELETE FROM bid WHERE bid_id = ${bidId}`;
+                con.query(deleteQuery, function (err, result) {
+
+                    if (err) throw err;
+                    res.redirect(`/cars/view-car/${req.params.ad_id}`);
+                });
+            }
+            else {
+                res.sendStatus(404);
+            }
+        }
+        else {
+            res.sendStatus(404);
+        }
     });
+
+
 });
 
 router.get('/:ad_id/confirm-bid/:bid_id', authentication, function(req, res, next){
 
-    var query = `UPDATE bid SET bid_confirmed = 1 WHERE bid_id = ${req.params.bid_id}`;
-    con.query(query, function (err, result) {
+    var adId = req.params.ad_id;
+    var adAuthorQuery = `SELECT ad_author_id FROM ad WHERE ad_id = ${adId}`;
+    con.query(adAuthorQuery, function (err, result) {
         if (err) throw err;
-        res.redirect(`/cars/view-car/${req.params.ad_id}`);
+        if (result.length) {
+            if (req.user.user_id == result[0].ad_author_id) {
+                var query = `UPDATE bid SET bid_confirmed = 1 WHERE bid_id = ${req.params.bid_id}`;
+                con.query(query, function (err, result) {
+                    if (err) throw err;
+                    res.redirect(`/cars/view-car/${req.params.ad_id}`);
+                });
+            }
+            else{
+                res.sendStatus(404);
+            }
+        }
+        else {
+            res.sendStatus(404);
+        }
     });
+
 });
 
 router.post('/send-bid/:ad_id', authentication, function(req, res) {
