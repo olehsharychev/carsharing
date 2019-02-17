@@ -1,88 +1,124 @@
 body
-  padding: 50px
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+    padding: 50px
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
 
 a
-  color: #00B7FF
+    color: #00B7FF
 
 div
-  box-sizing: border-box
+    box-sizing: border-box
 
 .navbar
-  display: flex
-  justify-content: space-between
-  width: 50%
+    display: flex
+    justify-content: space-between
+    width: 50%
 
 .cars-wrapper
-  .ad-list
-
-    &__item
-      display: flex
-      flex-direction: row
-      justify-content: flex-start
-      margin-top: 10px
-      border: 1px solid #6b6a78
-      -webkit-border-radius: 5px
-      -moz-border-radius: 5px
-      border-radius: 5px
-
-      .photo
-        align-self: center
-        height: 150px
-        margin-left: 40px
-
-      .info
-        display: flex
-        flex-direction: column
-        align-items: flex-start
-        margin-left: 40px
-
-
-
-.view-main-wrapper
-  margin-top: 30px
-
-  .wrapper
-    display: flex
-    justify-content: space-between
-    width: 90%
-
-    .slider
-      width: 600px
-      height: 400px
-
-    .data-wrapper
-      display: flex
-      justify-content: center
-      flex-direction: column
-      width: 50%
-      margin-left: 20px
-
-      .list
-        display: flex
-        flex-direction: column
-        width: 100%
+    .ad-list
 
         &__item
-          display: flex
-          justify-content: space-between
-          width: 100%
+            display: flex
+            flex-direction: row
+            justify-content: flex-start
+            margin-top: 10px
+            border: 1px solid #6b6a78
+            -webkit-border-radius: 5px
+            -moz-border-radius: 5px
+            border-radius: 5px
 
-  .description
-    margin-top: 50px
-    text-align: center
+            .photo
+                align-self: center
+                height: 150px
+                margin-left: 40px
 
-  .bids-header
-    display: flex
-    justify-content: space-between
+            .info
+                display: flex
+                flex-direction: column
+                align-items: flex-start
+                margin-left: 40px
 
-  .bids-wrapper
-    
-    .bid
-      display: flex
-      justify-content: space-around
-      border: 1px solid #6b6a78
-      -webkit-border-radius: 5px
-      -moz-border-radius: 5px
-      border-radius: 5px
-      margin-top: 5px
+.view-main-wrapper
+    margin-top: 30px
+
+    .wrapper
+        display: flex
+        justify-content: space-between
+        width: 90%
+
+        .slider
+            width: 600px
+            height: 400px
+
+        .data-wrapper
+            display: flex
+            justify-content: center
+            flex-direction: column
+            width: 50%
+            margin-left: 20px
+
+            .list
+                display: flex
+                flex-direction: column
+                width: 100%
+
+                &__item
+                    display: flex
+                    justify-content: space-between
+                    width: 100%
+
+    .description
+        margin-top: 50px
+        text-align: center
+
+    .bids-header
+        display: flex
+        justify-content: space-between
+
+    .bids-comments
+        display: flex
+        justify-content: space-between
+
+        .bids-wrapper
+            width: 50%
+
+            .bid
+                display: flex
+                justify-content: space-around
+                border: 1px solid #6b6a78
+                -webkit-border-radius: 5px
+                -moz-border-radius: 5px
+                border-radius: 5px
+                margin-top: 5px
+
+        .comments-wrapper
+            display: flex
+            flex-direction: column
+            justify-content: flex-start
+            align-items: center
+            width: 50%
+
+            .comment-form
+                display: flex
+                align-items: center
+                justify-content: flex-start
+                flex-direction: column
+                width: 50%
+
+                &__text
+                    width: 100%
+                &__send
+                    width: 100%
+
+            .comments-list
+                width: 80%
+                
+                .comment
+                    margin-top: 5px
+                    border: 1px solid #6b6a78
+                    -webkit-border-radius: 5px
+                    -moz-border-radius: 5px
+                    border-radius: 5px
+
+
+
+

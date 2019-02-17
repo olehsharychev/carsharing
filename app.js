@@ -23,6 +23,7 @@ var createAdRouter = require('./routes/create-ad');
 var registrationRouter = require('./routes/registration.js');
 var loginRouter = require('./routes/login.js');
 var viewCarRouter = require('./routes/view-car');
+var messagesRouter = require('/routes/messages');
 
 
 var app = express();
@@ -140,6 +141,7 @@ app.use('/create', createAdRouter);
 app.use('/registration', registrationRouter);
 app.use('/register', registrationRouter);
 app.use('/cars/view-car', viewCarRouter);
+app.use('/messages', messagesRouter);
 
 // app.use('/login', loginRouter);
 // app.use('/signin', loginRouter);

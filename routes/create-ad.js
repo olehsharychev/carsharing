@@ -53,11 +53,12 @@ router.post('/', upload.array('carPhoto', 10), function (req, res) {
             });
             con.query(imgQuery, [values], function (err) {
                 if (err) throw err;
+                res.redirect('/cars');
             });
         });
     });
 
-    res.redirect('/cars');
+
 });
 
 module.exports = router;

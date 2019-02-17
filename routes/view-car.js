@@ -26,22 +26,28 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             car[0].user_role_id = req.user.user_role_id;
 
             var imageQuery = `SELECT * FROM image WHERE ad_id = ${adId}`;
-            con.query(imageQuery, function (err, result, fields){
+            con.query(imageQuery, function (err, result, fields) {
                 if (err) throw err;
-                if (result) {
-                    car[car.length] = {images: result};
 
-                    var bidQuery = `SELECT * from bid
-                                    left join user on user.user_id = bid.bid_author_id
-                                    where bid.ad_id = ${adId}`;
-                    con.query(bidQuery, function (err, result, fields){
+                car[car.length] = {images: result};
+
+                var bidQuery = `SELECT bid.*, user.user_login from bid
+                                left join user on user.user_id = bid.bid_author_id
+                                where bid.ad_id = ${adId}`;
+                con.query(bidQuery, function (err, result, fields) {
+                    if (err) throw err;
+                    car[car.length] = {bids: result};
+
+                    var commentsQuery = `SELECT comment.*, user.user_login FROM comment 
+                                         LEFT JOIN user ON user.user_id = comment.comment_author_id
+                                         WHERE comment_ad_id = ${adId}`;
+                    con.query(commentsQuery, function (err, result, fields) {
                         if (err) throw err;
-                        if (result){
-                            car[car.length] = {bids: result};
-                            res.render('view-car', {car: car});
-                        }
+                        car[car.length] = {comments: result};
+                        res.render('view-car', {car: car});
+                        console.log(car[3].comments);
                     });
-                }
+                });
             });
         }
     });
@@ -113,6 +119,21 @@ router.post('/send-bid/:ad_id', authentication, function(req, res) {
                  STR_TO_DATE("${datetime}", "%Y-%m-%d %H:%i:%s"),
                  '')`;
 
+    con.query(query, function (err) {
+        if (err) throw err;
+        res.redirect(`/cars/view-car/${req.params.ad_id}`);
+    });
+});
+
+router.post('/send-comment/:ad_id', authentication, function (req, res) {
+
+    var datetime = moment().format('YYYY-MM-DD HH:mm:ss');
+    var query = `INSERT INTO comment VALUES (
+                 NULL,
+                 ${req.user.user_id},
+                 ${req.params.ad_id},
+                 '${req.body.commentText}',
+                 STR_TO_DATE("${datetime}", "%Y-%m-%d %H:%i:%s"))`;
     con.query(query, function (err) {
         if (err) throw err;
         res.redirect(`/cars/view-car/${req.params.ad_id}`);
