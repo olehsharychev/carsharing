@@ -1,2 +1,11 @@
 extends layout
 block content
+	div.messages-wrapper
+		div.message
+			div.message__author
+			div.message__text
+
+	form(action="/messages/send-message", method="POST")
+		input(type="text", name="messageText", placeholder="Введите сообщение")
+		br
+		input(type="submit", name="submit" value="Отправить")
