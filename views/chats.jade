@@ -1,6 +1,7 @@
 extends layout
 block content
 	div.chats-wrapper
-		- chats[0].forEach(function(item) {
-
-		- });
+		div.chats-wrapper
+			- chats.forEach(function(item) {
+				a(href="/chats/chat-with-#{item.chat_with_id}")= item.chat_with_user
+			- });

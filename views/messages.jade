@@ -1,11 +1,16 @@
 extends layout
 block content
 	div.messages-wrapper
-		div.message
-			div.message__author
-			div.message__text
+		- messages.forEach(function(message) {
+			div.message
+				div.message__author
+					p= message.message_author
+				div.message__text
+					p= message.message_text
+		- });
 
-	form(action="/messages/send-message", method="POST")
+
+	form(action="/chats/send-message-to-#{recipient_id}", method="POST")
 		input(type="text", name="messageText", placeholder="Введите сообщение")
 		br
 		input(type="submit", name="submit" value="Отправить")

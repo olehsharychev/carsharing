@@ -24,6 +24,7 @@ var registrationRouter = require('./routes/registration.js');
 var loginRouter = require('./routes/login.js');
 var viewCarRouter = require('./routes/view-car');
 var messagesRouter = require('./routes/chats');
+var paymentRouter = require('./routes/payment');
 
 
 var app = express();
@@ -142,9 +143,15 @@ app.use('/registration', registrationRouter);
 app.use('/register', registrationRouter);
 app.use('/cars/view-car', viewCarRouter);
 app.use('/chats', messagesRouter);
+app.use('/cars/payment', paymentRouter);
 
 // app.use('/login', loginRouter);
 // app.use('/signin', loginRouter);
+
+app.post('', function (req, res, next) {
+    console.log(req);
+    console.log(req.body);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

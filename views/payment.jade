@@ -1,0 +1,8 @@
+extends layout
+block content
+	div.main-wrapper
+		form(method="POST", action="https://www.liqpay.ua/api/3/checkout", accept-charset="utf-8")
+			input(type="hidden", name="data", value="eyJwdWJsaWNfa2V5IjoiaTkyMjEzMzg4NjUiLCJzZXJ2ZXJfdXJsIjoiaHR0cDovLzZhODY2NzM1Lm5ncm9rLmlvIiwiYWN0aW9uIjoicDJwIiwidmVyc2lvbiI6IjMiLCJwaG9uZSI6IjM4MDYzNDE1NzY1OSIsImFtb3VudCI6IjEiLCJjdXJyZW5jeSI6IlVBSCIsImRlc2NyaXB0aW9uIjoiZGVzY3JpcHRpb24gdGV4dCIsIm9yZGVyX2lkIjoib3JkZXJfaWRfMiIsInJlY2VpdmVyX2NhcmQiOiI1MzU1NTcxMTA1NTI4NDM0Iiwic2FuZGJveCI6IjEifQ==")
+			input(type="hidden", name="signature", value="xeSRMrS7Knq+atLK0mqDBcrhfxE=")
+			input(type="image", src="//static.liqpay.ua/buttons/p1ru.radius.png")
+		//input(type="submit", name="submit")
