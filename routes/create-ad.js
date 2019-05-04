@@ -6,10 +6,9 @@ var authentication = require('../lib/authentication');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads/')
+        cb(null, 'public/uploads/ad_photos/')
     },
     filename: function (req, file, cb) {
-
         cb(null, Date.now() + file.originalname)
     }
 });

@@ -1,15 +1,33 @@
 div
-    form(action='/register', method='post')
-        pre Enter login
-        input(type='text', name='login')
-        br
-        pre Enter password
-        input(type='password', name='password')
-        br
-        pre Select role
-        select(size='1', name='role')
-            option(value='1') admin
-            option(value='2', selected) renter
-            option(value='3') landlord
-        pre
-        input(type='submit', value='send')
+	form(action="/registration/register", method="post", enctype="multipart/form-data")
+		pre Enter login
+		input(type="text", name="login", required)
+		br
+		pre Enter password
+		input(type="password", name="password", required)
+		br
+		pre Select role
+		select(size="1", name="role")
+			option(value="1") admin
+			option(value="2", selected) renter
+			option(value="3") landlord
+		br
+		pre Выберите фотографию пользователя
+		input(type="file", name="userPhoto", required)
+		br
+		pre Введите ваше имя
+		input(type="text", name="firstName", required)
+		br
+		pre Введите вашу фамилию
+		input(type="text", name="surname", required)
+		br
+		pre Введите электронную почту
+		input(type="email", name="email", required)
+		br
+		pre Введите номер телефона в международном формате
+		input(type="tel", name="telnum", required)
+		br
+		pre Введите номер банковской карты, на которую будет осуществлятся оплата аренды
+		input(type="text", name="cardnum", required)
+		br
+		input(type="submit", value="send")
