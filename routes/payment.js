@@ -13,16 +13,15 @@ router.get('/:ad_id', authentication, function(req, res, next) {
     var public_key = "i9221338865";
     var private_key = "11m1lvjWewQTlbZRiCnVuWU7vLJUjObSxoKdgvHY";
 
-    var data = 'eyJhY3Rpb24iOiJwMnAiLCJwYXltZW50X2lkIjoxMDEzNDQyNDYxLCJzdGF0dXMiOiJzYW5kYm94IiwidmVyc2lvbiI6MywidHlwZSI6ImJ1eSIsInBheXR5cGUiOiJjYXJkIiwicHVibGljX2tleSI6Imk5MjIxMzM4ODY1IiwiYWNxX2lkIjo0MTQ5NjMsIm9yZGVyX2lkIjoib3JkZXJfaWRfMiIsImxpcXBheV9vcmRlcl9pZCI6IjM2WkhZUVRNMTU1NjgyOTQyNDY4MDE2NCIsImRlc2NyaXB0aW9uIjoiZGVzY3JpcHRpb24gdGV4dCIsInNlbmRlcl9jYXJkX21hc2syIjoiNTM1NTU3KjM0Iiwic2VuZGVyX2NhcmRfYmFuayI6IlBVQkxJQyBKT0lOVCBTVE9DSyBDT01QQU5ZIFwiQUwiLCJzZW5kZXJfY2FyZF90eXBlIjoibWMiLCJzZW5kZXJfY2FyZF9jb3VudHJ5Ijo4MDQsImlwIjoiNzguMTU0LjE2Ny4yNTMiLCJhbW91bnQiOjEuMCwiY3VycmVuY3kiOiJVQUgiLCJzZW5kZXJfY29tbWlzc2lvbiI6NS4wLCJyZWNlaXZlcl9jb21taXNzaW9uIjowLjAsImFnZW50X2NvbW1pc3Npb24iOjAuMCwiYW1vdW50X2RlYml0IjoxLjAsImFtb3VudF9jcmVkaXQiOjEuMCwiY29tbWlzc2lvbl9kZWJpdCI6NS4wLCJjb21taXNzaW9uX2NyZWRpdCI6MC4wLCJjdXJyZW5jeV9kZWJpdCI6IlVBSCIsImN1cnJlbmN5X2NyZWRpdCI6IlVBSCIsInNlbmRlcl9ib251cyI6MC4wLCJhbW91bnRfYm9udXMiOjAuMCwibXBpX2VjaSI6IjciLCJpc18zZHMiOmZhbHNlLCJsYW5ndWFnZSI6InJ1IiwiY3JlYXRlX2RhdGUiOjE1NTY4Mjk0MjQ2ODUsImVuZF9kYXRlIjoxNTU2ODI5NDI0Njk4LCJ0cmFuc2FjdGlvbl9pZCI6MTAxMzQ0MjQ2MX0=';
-    var buff = Buffer.from(data, 'base64');
-    var responseJSON = JSON.parse(buff.toString('utf-8'));
-    // console.log(responseJSON);
-    var query = `SELECT bid_id FROM bid WHERE 
+    var query = `SELECT @bid_ad_id := ad_id, bid_id, ad_id FROM bid WHERE 
                  ad_id = ${req.params.ad_id} 
                  AND 
                  bid_author_id = ${req.user.user_id} 
                  AND 
-                 bid_confirmed = "1"`;
+                 bid_confirmed = "1";
+                 SELECT @author_id := ad_author_id, ad_price FROM ad WHERE ad_id = @bid_ad_id;
+                 SELECT user_cardnum AS receiver_cardnum FROM user WHERE user_id = @author_id;
+                 SELECT user_telnum AS sender_telnum FROM user WHERE user_id = ${req.user.user_id}`;
     con.query(query, function (err, result) {
         if (err) throw err;
 
@@ -36,15 +35,15 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             // формируем json для html формы с кнопкой оплаты
             var json = {
                 public_key: "i9221338865",
-                server_url: "http://6a866735.ngrok.io",
+                server_url: `http://${req.get('host')}`,
                 action: "p2p",
                 version: "3",
-                phone: "380634157659",
-                amount: "1",
+                phone: `${result[3][0].sender_telnum}`,
+                amount: `${result[1][0].ad_price}`,
                 currency: "UAH",
-                description: "description text",
-                order_id: `order_id_${result[0].bid_id}`,
-                receiver_card: "5355571105528434",
+                description: `Оплата по объявлению №${result[0][0].ad_id}, заявка №${result[0][0].bid_id}`,
+                order_id: `${result[0][0].bid_id}`,
+                receiver_card: `${result[2][0].receiver_cardnum}`,
                 sandbox: "1"
             };
 
@@ -55,7 +54,6 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             var sha1 = crypto.createHash('sha1');
             sha1.update(signString);
             var signature = sha1.digest('base64');
-
             res.render('payment', {result: result, data: data, signature: signature});
         }
     });

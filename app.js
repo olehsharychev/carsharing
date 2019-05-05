@@ -15,6 +15,7 @@ var store = require('express-session').Store;
 var betterMemoryStore = require('session-memory-store')(session);
 var multer = require('multer');
 var upload = multer({ dest: 'uploads/' });
+var con = require('./lib/connection.js');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -145,8 +146,19 @@ app.use('/chats', messagesRouter);
 app.use('/cars/payment', paymentRouter);
 
 app.post('', function (req, res, next) {
-    console.log(req);
-    console.log(req.body);
+
+    // расшифровываем ответ об оплате от liqpay
+    var buff = Buffer.from(req.body.data, 'base64');
+    var responseJSON = JSON.parse(buff.toString('utf-8'));
+
+    // если платеж успешный, то записываем в бд информацию об этом
+    if (responseJSON.status === 'sandbox' || responseJSON.status === 'success'){
+        var query = `UPDATE bid SET bid_paid = '1' WHERE bid_id = ${responseJSON.order_id}`;
+        con.query(query, function (err, result, next) {
+           if (err) throw err;
+            res.redirect('/cars');
+        });
+    }
 });
 
 // catch 404 and forward to error handler
