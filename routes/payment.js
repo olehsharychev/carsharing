@@ -4,14 +4,11 @@ var mysql = require('mysql');
 var moment = require('moment');
 var con = require('../lib/connection.js');
 var authentication = require('../lib/authentication');
-var LiqPay = require('liqpay-sdk');
 var crypto = require('crypto');
 
 
 
 router.get('/:ad_id', authentication, function(req, res, next) {
-    var public_key = "i9221338865";
-    var private_key = "11m1lvjWewQTlbZRiCnVuWU7vLJUjObSxoKdgvHY";
 
     var query = `SELECT @bid_ad_id := ad_id, bid_id, ad_id FROM bid WHERE 
                  ad_id = ${req.params.ad_id} 
@@ -48,6 +45,7 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             };
 
             // получение signature и data
+            var private_key = "11m1lvjWewQTlbZRiCnVuWU7vLJUjObSxoKdgvHY";
             var jsonString = JSON.stringify(json);
             var data = Buffer.from(jsonString).toString('base64');
             var signString = private_key + data + private_key;
