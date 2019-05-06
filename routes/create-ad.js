@@ -36,10 +36,14 @@ router.post('/', upload.array('carPhoto', 10), function (req, res) {
                 '${req.body.power}',
                 '${req.body.year}',
                 '${req.body.mileage}',
-                '1')`;
+                '1',
+                '${req.body.lat}',
+                '${req.body.lng}')`;
 
     con.query(query, function (err) {
         if (err) throw err;
+
+        // записываем имена файлов фотографий по последнему айди объявления
         con.query("SELECT MAX(ad_id) AS ad_id FROM ad", function (err, rows) {
             if (err) throw err;
             var adId = rows[0].ad_id;

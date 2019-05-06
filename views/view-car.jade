@@ -5,7 +5,7 @@ block content
 			div.slider
 				- var i = 0;
 				- car[1].images.forEach(function(item) {
-					img(src="/uploads/#{item.image_path}")
+					img(src="/uploads/ad_photos/#{item.image_path}")
 					- i++;
 				- });
 			div.data-wrapper
@@ -77,7 +77,7 @@ block content
 								br
 							- }
 							// если заявка подтверждена автором объявления, то арендатор может оплатить
-							- if (car[0].user_id == item.bid_author_id && item.bid_confirmed == 1) {
+							- if (car[0].user_id == item.bid_author_id && item.bid_confirmed == 1 && item.bid_paid == 0) {
 								a(href="/cars/payment/#{car[0].ad_id}") Оплатить
 								br
 							- }
@@ -109,3 +109,4 @@ block content
 	script(src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous")
 	script(type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js")
 	script(type="text/javascript" src="/javascripts/view-car.js")
+	script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYO3HG7LfuDJU978Vere5V6EVN3IEdsbo&libraries=places&callback=initMap", async, defer)

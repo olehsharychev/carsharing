@@ -5,7 +5,7 @@ block content
         - adList.forEach(function() {
         div(class="ad-list")
             div(class="ad-list__item")
-                img(src="/uploads/#{adList[i].image_path}", class="photo")
+                img(src="/uploads/ad_photos/#{adList[i].image_path}", class="photo")
                 div.info
                     a(href="/cars/view-car/#{adList[i].ad_id}")
                         h3= adList[i].ad_tittle
