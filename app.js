@@ -26,6 +26,7 @@ var loginRouter = require('./routes/login.js');
 var viewCarRouter = require('./routes/view-car');
 var messagesRouter = require('./routes/chats');
 var paymentRouter = require('./routes/payment');
+var userProfileRouter = require('./routes/user-profile');
 
 
 var app = express();
@@ -144,6 +145,7 @@ app.use('/registration', registrationRouter);
 app.use('/cars/view-car', viewCarRouter);
 app.use('/chats', messagesRouter);
 app.use('/cars/payment', paymentRouter);
+app.use('/profile', userProfileRouter);
 
 app.post('', function (req, res, next) {
 

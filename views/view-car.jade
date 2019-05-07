@@ -36,6 +36,9 @@ block content
 		div.description
 			p= car[0].ad_description
 
+		div.map-wrapper
+			div(id="map")
+
 		div.bids-header
 			h3 Заявки
 			- if (car[2].bids.map(function(item) {return item.bid_author_id; }).indexOf(car[0].user_id) === -1){
@@ -104,7 +107,8 @@ block content
 					- });
 
 
-
+	span(class="hidden", id="lat")= car[0].ad_lat
+	span(class="hidden", id="lng")= car[0].ad_lng
 
 	script(src="https://code.jquery.com/jquery-3.2.0.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous")
 	script(type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js")

@@ -6,4 +6,26 @@ $(".slider").slick({
     adaptiveHeight: true
 });
 
-console.log(car[0].ad_tittle);
+
+function initMap() {
+    var map, marker;
+    var myLatlng = {
+        lat: parseFloat($('#lat').text()),
+        lng: parseFloat($('#lng').text())
+    };
+
+    // создание карты
+    map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 12,
+        center: myLatlng
+    });
+
+    // создание маркера
+    marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        draggable: false
+    });
+
+    map.panTo(myLatlng);
+}

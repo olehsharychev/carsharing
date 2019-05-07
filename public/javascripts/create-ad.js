@@ -20,7 +20,7 @@ function initMap() {
     // создание маркера
     marker = new google.maps.Marker({
         map: map,
-        draggable: true
+        draggable: false
     });
 
     // при клике на карту устанавливаем маркер в место клика и записываем координаты в input

@@ -13,6 +13,13 @@ div
     justify-content: space-between
     width: 50%
 
+#map
+    margin: 10px
+    height: 400px
+
+.hidden
+    display: none
+
 .cars-wrapper
     .ad-list
 
@@ -124,13 +131,35 @@ div
     flex-direction: column
     margin-top: 30px
 
-#map
-    margin: 10px
-    height: 400px
+.profile-wrapper
+    display: flex
+    flex-direction: column
 
-.hidden
-    display: none
+    .user-photo
+        max-width: 20%
 
+    .user-ads
+
+        &__item
+            display: flex
+            flex-direction: row
+            justify-content: flex-start
+            margin-top: 10px
+            border: 1px solid #6b6a78
+            -webkit-border-radius: 5px
+            -moz-border-radius: 5px
+            border-radius: 5px
+
+            .photo
+                align-self: center
+                height: 150px
+                margin-left: 40px
+
+            .info
+                display: flex
+                flex-direction: column
+                align-items: flex-start
+                margin-left: 40px
 
 
 
