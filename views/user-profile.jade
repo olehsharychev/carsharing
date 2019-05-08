@@ -10,9 +10,16 @@ block content
 			- if (user[0][0].user_role_id == 2)
 				p Арендатор
 		div.user-rating
-			a(class="user-rating__plus", href="/profile/vote-rating-plus/#{user[0][0].user_id}") +
+
+			// проверяем голосовал ли уже текущий пользователь за пользователя,
+			// страница которого открыта в данный момент
+			- if (user[2].map(function(item) { return item.voted_user_id; }).indexOf(currentUser) === -1)
+				- if (currentUser !== user[0][0].user_id)
+					a(class="user-rating__plus", href="/profile/vote-rating-plus/#{user[0][0].user_id}") +
 			span(class="user-rating__number")= user[0][0].user_rating
-			a(class="user-rating__minus", href="/profile/vote-rating-minus/#{user[0][0].user_id}") -
+			- if (user[2].map(function(item) { return item.voted_user_id; }).indexOf(currentUser) === -1)
+				- if (currentUser !== user[0][0].user_id)
+					a(class="user-rating__minus", href="/profile/vote-rating-minus/#{user[0][0].user_id}") -
 		div.user-data
 			div.user-data__surname
 				span= user[0][0].user_surname
