@@ -16,7 +16,14 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.get('/', authentication, function (req, res, next) {
-    res.render('create-ad');
+
+    // проверяем является ли текущий пользователь арендодателем
+    if (req.user.user_role_id === 3) {
+        res.render('create-ad', {currentUser: req.user.user_id, currentRole: req.user.user_role_id});
+    }
+    else {
+        res.sendStatus(404);
+    }
 });
 
 router.post('/', upload.array('carPhoto', 10), function (req, res) {

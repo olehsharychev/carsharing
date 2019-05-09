@@ -7,9 +7,13 @@ html
 		header
 			div.navbar
 				a(href="/cars") На главную
-				a(href="/login") Вход
-				a(href="/registration") Регистрация
-				a(href="/create-ad") Создать объявление
-				a(href="/chats") Сообщения
-				a(href="/logout") Выйти
+				- if (currentUser === 0)
+					a(href="/login") Вход
+					a(href="/registration") Регистрация
+				- if (currentRole === 3)
+					a(href="/create-ad") Создать объявление
+				- if (currentUser !== 0)
+					a(href="/chats") Сообщения
+					a(href="/profile/#{currentUser}") Мой профиль
+					a(href="/logout") Выйти
 		block content

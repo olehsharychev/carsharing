@@ -6,6 +6,8 @@ var authentication = require('../lib/authentication');
 
 
 router.get('/', authentication, function (req, res, next) {
+
+    // получаем список пользователей, с которыми у текущего пользователя есть чат
     var query = `SELECT DISTINCT 
                  IF(message.message_author_id = ${req.user.user_id}, 
                  message.message_recipient_id, 
@@ -24,18 +26,14 @@ router.get('/', authentication, function (req, res, next) {
     con.query(query, function (err, result) {
         if (err) throw err;
 
-        var chats = {chats: result};
-
-
-        chats.user_id = req.user.user_id;
-
-        console.log(chats);
-        res.render('chats', chats);
+        res.render('chats', {chats: result, currentUser: req.user.user_id, currentRole: req.user.user_role_id});
     });
 
 });
 
 router.get('/chat-with-:user_id', authentication, function (req, res, next) {
+
+    // получаем сообщения между двумя пользователями
     var query = `SELECT message.*, user.user_login message_author 
                  FROM message
                  LEFT JOIN user ON user.user_id = message.message_author_id 
@@ -49,7 +47,12 @@ router.get('/chat-with-:user_id', authentication, function (req, res, next) {
                  message.message_recipient_id = ${req.params.user_id})`;
     con.query(query, function (err, result) {
         if (err) throw err;
-        res.render('messages', {messages: result, recipient_id: req.params.user_id});
+        res.render('messages', {
+            messages: result,
+            recipient_id: req.params.user_id,
+            currentUser: req.user.user_id,
+            currentRole: req.user.user_role_id
+        });
     });
 });
 
@@ -67,4 +70,5 @@ router.post('/send-message-to-:recipient_id', authentication, function (req, res
         res.redirect(`/chats/chat-with-${req.params.recipient_id}`);
     });
 });
+
 module.exports = router;

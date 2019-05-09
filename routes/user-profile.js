@@ -16,7 +16,7 @@ router.get('/:user_id', authentication, function (req, res, next) {
     con.query(query, function (err, result) {
         if (err) throw err;
         console.log(result);
-        res.render('user-profile', {user: result, currentUser: req.user.user_id});
+        res.render('user-profile', {user: result, currentUser: req.user.user_id, currentRole: req.user.user_role_id});
     });
 });
 

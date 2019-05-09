@@ -8,17 +8,12 @@ var authentication = require('../lib/authentication');
 router.get('/:ad_id', authentication, function(req, res, next) {
 
     var adId = req.params.ad_id;
-    // var query = `SELECT * FROM ad
-    //              LEFT JOIN image ON ad.ad_id = image.ad_id
-    //              LEFT JOIN bid ON ad.ad_id = bid.ad_id
-    //              LEFT JOIN user ON bid.bid_author_id = user.user_id
-    //              WHERE ad.ad_id = ${adId}`;
     var adQuery = `SELECT * FROM ad WHERE ad_id = ${adId}`;
     con.query(adQuery, function (err, result, fields) {
         if (err) throw err;
         if (result.length == 0) {
             console.log('Cannot find the record in the DB');
-            res.sendStatus(500);
+            res.sendStatus(404);
         }
         else {
             var car = result;
@@ -44,8 +39,11 @@ router.get('/:ad_id', authentication, function(req, res, next) {
                     con.query(commentsQuery, function (err, result, fields) {
                         if (err) throw err;
                         car[car.length] = {comments: result};
-                        res.render('view-car', {car: car});
-                        console.log(car[3].comments);
+                        res.render('view-car', {
+                            car: car,
+                            currentUser: req.user.user_id,
+                            currentRole: req.user.user_role_id
+                        });
                     });
                 });
             });
@@ -117,7 +115,8 @@ router.post('/send-bid/:ad_id', authentication, function(req, res) {
                  '${req.body.bidDescription}',
                  ${req.body.bidPrice},
                  STR_TO_DATE("${datetime}", "%Y-%m-%d %H:%i:%s"),
-                 '')`;
+                 '0',
+                 '0')`;
 
     con.query(query, function (err) {
         if (err) throw err;

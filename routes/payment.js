@@ -52,7 +52,13 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             var sha1 = crypto.createHash('sha1');
             sha1.update(signString);
             var signature = sha1.digest('base64');
-            res.render('payment', {result: result, data: data, signature: signature});
+            res.render('payment', {
+                result: result,
+                data: data,
+                signature: signature,
+                currentUser: req.user.user_id,
+                currentRole: req.user.user_role_id
+            });
         }
     });
 });

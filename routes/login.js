@@ -19,14 +19,12 @@ router.post('/', function (req, res) {
         //проверяем пароль
         bcrypt.compare(req.body.password, result[0].user_password).then(function (checkPass) {
           if(checkPass){
-
               res.redirect('/');
           }
           else {
               res.redirect('/login');
           }
         });
-
     });
 });
 
