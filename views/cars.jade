@@ -1,16 +1,20 @@
 extends layout
 block content
-    div.cars-wrapper
-        - var i = 0;
-        - adList.forEach(function() {
-        div(class="ad-list")
-            div(class="ad-list__item")
-                img(src="/uploads/ad_photos/#{adList[i].image_path}", class="photo")
-                div.info
-                    a(href="/cars/view-car/#{adList[i].ad_id}")
-                        h3= adList[i].ad_tittle
-                    p= adList[i].ad_description
-                    p= adList[i].car_brand
-                    p= adList[i].car_model
-        - i++;
-        - });
+	div.cars-wrapper
+		form(action="/cars/search", method="GET", class="search-form")
+			input(type="text", name="searchData")
+			input(type="submit", name="submit")
+
+		- var i = 0;
+		- adList.forEach(function() {
+		div(class="ad-list")
+			div(class="ad-list__item")
+				img(src="/uploads/ad_photos/#{adList[i].image_path}", class="photo")
+				div.info
+					a(href="/cars/view-car/#{adList[i].ad_id}")
+						h3= adList[i].ad_tittle
+					p= adList[i].ad_description
+					p= adList[i].car_brand
+					p= adList[i].car_model
+		- i++;
+		- });
