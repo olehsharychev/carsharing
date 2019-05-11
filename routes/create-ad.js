@@ -17,13 +17,25 @@ var upload = multer({ storage: storage });
 
 router.get('/', authentication, function (req, res, next) {
 
-    // проверяем является ли текущий пользователь арендодателем
-    if (req.user.user_role_id === 3) {
-        res.render('create-ad', {currentUser: req.user.user_id, currentRole: req.user.user_role_id});
-    }
-    else {
-        res.sendStatus(404);
-    }
+    // подсчет непрочитанных сообщений
+    var countMessagesQuery = `SELECT COUNT(message_unread) AS amount_unread FROM message WHERE
+                              message_unread = 1
+                              AND
+                              message_recipient_id = ${req.user.user_id};`;
+    con.query(countMessagesQuery, function (err, result) {
+
+        // проверяем является ли текущий пользователь арендодателем
+        if (req.user.user_role_id === 3) {
+            res.render('create-ad', {
+                currentUser: req.user.user_id,
+                currentRole: req.user.user_role_id,
+                amountUnread: result[0].amount_unread
+            });
+        }
+        else {
+            res.sendStatus(404);
+        }
+    });
 });
 
 router.post('/', upload.array('carPhoto', 10), function (req, res) {

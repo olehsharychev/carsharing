@@ -9,6 +9,8 @@ router.get('/:ad_id', authentication, function(req, res, next) {
 
     var adId = req.params.ad_id;
     var adQuery = `SELECT * FROM ad WHERE ad_id = ${adId}`;
+
+    // получение отдельного объявления
     con.query(adQuery, function (err, result, fields) {
         if (err) throw err;
         if (result.length == 0) {
@@ -20,12 +22,13 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             car[0].user_id = req.user.user_id;
             car[0].user_role_id = req.user.user_role_id;
 
+            // получение всех фотографий объявления
             var imageQuery = `SELECT * FROM image WHERE ad_id = ${adId}`;
             con.query(imageQuery, function (err, result, fields) {
                 if (err) throw err;
-
                 car[car.length] = {images: result};
 
+                // получение всех заявок к объявлению
                 var bidQuery = `SELECT bid.*, user.user_login from bid
                                 left join user on user.user_id = bid.bid_author_id
                                 where bid.ad_id = ${adId}`;
@@ -33,16 +36,23 @@ router.get('/:ad_id', authentication, function(req, res, next) {
                     if (err) throw err;
                     car[car.length] = {bids: result};
 
-                    var commentsQuery = `SELECT comment.*, user.user_login FROM comment 
+                    // получение списка комментариев
+                    // подсчет непрочитанных сообщений
+                    var comMesQuery = `SELECT comment.*, user.user_login FROM comment 
                                          LEFT JOIN user ON user.user_id = comment.comment_author_id
-                                         WHERE comment_ad_id = ${adId}`;
-                    con.query(commentsQuery, function (err, result, fields) {
+                                         WHERE comment_ad_id = ${adId};
+                                         SELECT COUNT(message_unread) AS amount_unread FROM message WHERE
+                                         message_unread = 1
+                                         AND
+                                         message_recipient_id = ${req.user.user_id};`;
+                    con.query(comMesQuery, function (err, result, fields) {
                         if (err) throw err;
-                        car[car.length] = {comments: result};
+                        car[car.length] = {comments: result[0]};
                         res.render('view-car', {
                             car: car,
                             currentUser: req.user.user_id,
-                            currentRole: req.user.user_role_id
+                            currentRole: req.user.user_role_id,
+                            amountUnread: result[1][0].amount_unread
                         });
                     });
                 });

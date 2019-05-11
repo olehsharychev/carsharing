@@ -13,7 +13,7 @@ html
 				- if (currentRole === 3)
 					a(href="/create-ad") Создать объявление
 				- if (currentUser !== 0)
-					a(href="/chats") Сообщения
+					a(href="/chats")= "Сообщения (" + amountUnread + ")"
 					a(href="/profile/#{currentUser}") Мой профиль
 					a(href="/logout") Выйти
 		block content

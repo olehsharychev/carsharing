@@ -52,12 +52,20 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             var sha1 = crypto.createHash('sha1');
             sha1.update(signString);
             var signature = sha1.digest('base64');
-            res.render('payment', {
-                result: result,
-                data: data,
-                signature: signature,
-                currentUser: req.user.user_id,
-                currentRole: req.user.user_role_id
+
+            var unreadMessagesQuery = `SELECT COUNT(message_unread) AS amount_unread FROM message WHERE
+                                       message_unread = 1
+                                       AND
+                                       message_recipient_id = ${req.user.user_id};`;
+            con.query(unreadMessagesQuery, function (err, amountUnread) {
+                res.render('payment', {
+                    result: result,
+                    data: data,
+                    signature: signature,
+                    currentUser: req.user.user_id,
+                    currentRole: req.user.user_role_id,
+                    amountUnread: amountUnread[0].amount_unread
+                });
             });
         }
     });

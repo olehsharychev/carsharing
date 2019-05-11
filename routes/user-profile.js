@@ -12,11 +12,20 @@ router.get('/:user_id', authentication, function (req, res, next) {
                  AND
                  ad.ad_author_id = ${req.params.user_id}
                  GROUP BY ad.ad_id;
-                 SELECT * FROM user_vote WHERE vote_for_user_id = ${req.params.user_id};`;
+                 SELECT * FROM user_vote WHERE vote_for_user_id = ${req.params.user_id};
+                 SELECT COUNT(message_unread) AS amount_unread FROM message WHERE
+                 message_unread = 1
+                 AND
+                 message_recipient_id = ${req.user.user_id};`;
     con.query(query, function (err, result) {
         if (err) throw err;
         console.log(result);
-        res.render('user-profile', {user: result, currentUser: req.user.user_id, currentRole: req.user.user_role_id});
+        res.render('user-profile', {
+            user: result,
+            currentUser: req.user.user_id,
+            currentRole: req.user.user_role_id,
+            amountUnread: result[3][0].amount_unread
+        });
     });
 });
 

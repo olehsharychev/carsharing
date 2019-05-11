@@ -9,6 +9,8 @@ block content
 				p Арендодатель
 			- if (user[0][0].user_role_id == 2)
 				p Арендатор
+		- if (currentUser !== user[0][0].user_id)
+			a(href="/chats/chat-with-#{user[0][0].user_id}") Отправить сообщение
 		div.user-rating
 
 			// проверяем голосовал ли уже текущий пользователь за пользователя,
