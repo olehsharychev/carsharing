@@ -4,11 +4,17 @@ var bcrypt = require('bcrypt');
 var con = require('../lib/connection.js');
 
 router.get('/', function (req, res, next) {
-    res.render('login');
+    var currentUser = 0;
+    var currentRole = 0;
+    if (req.user !== undefined){
+        currentUser = req.user.user_id;
+        currentRole = req.user.user_role_id;
+    }
+    console.log(currentUser);
+    res.render('login', {currentUser: currentUser, currentRole: currentRole});
 });
 
 router.post('/', function (req, res) {
-
 
     //получаем из БД юзера с логином, который пришел из запроса
     var query = "SELECT * FROM `user` WHERE `user_login` = '" + req.body.login + "'";

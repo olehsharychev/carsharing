@@ -114,9 +114,9 @@ passport.deserializeUser(function (id, done) {
     });
 });
 
-app.get('/login', function(req, res){
-    res.render('login',{'message' :req.flash('message')});
-});
+// app.get('/login', function(req, res){
+//     res.render('login',{'message' :req.flash('message')});
+// });
 
 app.get('/logout', function (req, res) {
     req.logout();
@@ -138,6 +138,7 @@ app.post("/signin", passport.authenticate('local', {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/login', loginRouter);
 app.use('/cars', carsRouter);
 app.use('/create-ad', createAdRouter);
 app.use('/create', createAdRouter);
@@ -146,6 +147,7 @@ app.use('/cars/view-car', viewCarRouter);
 app.use('/chats', messagesRouter);
 app.use('/cars/payment', paymentRouter);
 app.use('/profile', userProfileRouter);
+
 
 app.post('', function (req, res, next) {
 

@@ -2,18 +2,67 @@ doctype html
 html
 	head
 		link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css")
+		link(
+		rel="stylesheet",
+		href="https://use.fontawesome.com/releases/v5.8.2/css/all.css",
+		integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay",
+		crossorigin="anonymous"
+		)
+		link(rel="stylesheet", type="text/css", href="/bootstrap/css/bootstrap.css")
 		link(rel="stylesheet", href="/stylesheets/style.css")
 	body
-		header
-			div.navbar
-				a(href="/cars") На главную
-				- if (currentUser === 0)
-					a(href="/login") Вход
-					a(href="/registration") Регистрация
-				- if (currentRole === 3)
-					a(href="/create-ad") Создать объявление
-				- if (currentUser !== 0)
-					a(href="/chats")= "Сообщения (" + amountUnread + ")"
-					a(href="/profile/#{currentUser}") Мой профиль
-					a(href="/logout") Выйти
+		nav(class="navbar navbar-expand-lg navbar-dark bg-dark")
+			button(
+				class="navbar-toggler",
+				type="button",
+				data-toggle="collapse",
+				data-target="#navbarSupportedContent",
+				aria-controls="navbarSupportedContent",
+				aria-expanded="false",
+				aria-label="Toggle navigation"
+			)
+				span(class="navbar-toggler-icon")
+			div(class="collapse navbar-collapse", id="navbarSupportedContent")
+				ul(class="navbar-nav mr-auto")
+					li(class="nav-item active")
+						a(class="nav-link", href="/cars")
+							#[i(class="fas fa-home")] Главная
+							span(class="sr-only")= (current)
+					- if (currentUser === 0)
+						li(class="nav-item")
+							a(class="nav-link", href="/login")
+								#[i(class="fas fa-sign-in-alt")] Вход
+						li(class="nav-item")
+							a(class="nav-link", href="/registration")
+								#[i(class="fas fa-user-plus")] Регистрация
+					- if (currentRole === 3)
+						li(class="nav-item")
+							a(class="nav-link", href="/create-ad")
+								#[i(class="fas fa-plus-circle")] Создать объявление
+					- if (currentUser !== 0)
+						li(class="nav-item")
+							a(class="nav-link", href="/chats")
+								#[i(class="fas fa-envelope")] Сообщения (#{amountUnread})
+						li(class="nav-item")
+							a(class="nav-link", href="/profile/#{currentUser}")
+								#[i(class="fas fa-user")] Мой профиль
+						li(class="nav-item")
+							a(class="nav-link", href="/logout")
+								#[i(class="fas fa-sign-out-alt")] Выйти
+
+
+
+
+
+			//div.navbar
+			//	a(href="/cars") На главную
+			//	- if (currentUser === 0)
+			//		a(href="/login") Вход
+			//		a(href="/registration") Регистрация
+			//	- if (currentRole === 3)
+			//		a(href="/create-ad") Создать объявление
+			//	- if (currentUser !== 0)
+			//		a(href="/chats")= "Сообщения (" + amountUnread + ")"
+			//		a(href="/profile/#{currentUser}") Мой профиль
+			//		a(href="/logout") Выйти
 		block content

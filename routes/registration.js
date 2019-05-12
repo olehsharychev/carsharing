@@ -16,7 +16,14 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.get('/', function (req, res, next) {
-    res.render('registration', {currentUser: req.user.user_id});
+    var currentUser = 0;
+    var currentRole = 0;
+    if (req.user !== undefined){
+        currentUser = req.user.user_id;
+        currentRole = req.user.user_role_id;
+    }
+    console.log(currentUser);
+    res.render('registration', {currentUser: currentUser, currentRole: currentRole});
 });
 
 router.post('/register', upload.single('userPhoto'), function (req, res) {
