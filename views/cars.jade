@@ -1,23 +1,27 @@
 extends layout
 block content
 	div.cars-wrapper
-		form(action="/cars/search", method="GET", class="search-form")
-			input(type="text", name="searchData")
-			input(type="submit", name="submit")
+		form(action="/cars/search", method="GET", class="search-form form-inline")
+			div(class="input-group")
+				div(class="input-group-prepend")
+					span(class="input-group-text")
+						i(class="fas fa-search")
+				input(type="text", name="searchData", id="search", class="form-control")
+			input(type="submit", name="submit", value="Поиск", class="btn btn-outline-primary ml-2")
 
-		- var i = 0;
-		- adList.forEach(function() {
-		div(class="ad-list")
-			div(class="ad-list__item")
-				img(src="/uploads/ad_photos/#{adList[i].image_path}", class="photo")
-				div.info
-					a(href="/cars/view-car/#{adList[i].ad_id}")
-						h3= adList[i].ad_tittle
-					p= adList[i].ad_description
-					p= adList[i].car_brand
-					p= adList[i].car_model
-		- i++;
-		- });
+		//div(class="card-deck")
+
+		div(class="cards-wrapper")
+
+			- adList.forEach(function(item) {
+				div(class="card bg-light border-secondary car-card")
+					img(src="/uploads/ad_photos/#{item.image_path}", class="card-img-top car-photo")
+					div(class="card-body")
+						a(href="/cars/view-car/#{item.ad_id}")
+							h4(class="card-title")= item.ad_tittle
+						h6(class="card-subtitle")= item.car_brand + " " + item.car_model
+						p(class="card-text")= item.ad_description
+			- });
 
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")
 	script(src="/javascripts/popper.min.js", type="text/javascript")

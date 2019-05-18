@@ -11,6 +11,7 @@ router.get('/', function (req, res, next) {
         currentRole = req.user.user_role_id;
     }
     console.log(currentUser);
+
     res.render('login', {currentUser: currentUser, currentRole: currentRole});
 });
 

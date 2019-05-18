@@ -8,7 +8,7 @@ var authentication = require('../lib/authentication');
 router.get('/', authentication, function (req, res, next) {
 
     // получаем список пользователей, с которыми у текущего пользователя есть чат
-    var query = `SELECT DISTINCT 
+    var query = `SELECT DISTINCT
                  IF(message.message_author_id = ${req.user.user_id}, 
                  message.message_recipient_id, 
                  message.message_author_id) 
@@ -29,6 +29,7 @@ router.get('/', authentication, function (req, res, next) {
 
     con.query(query, function (err, result) {
         if (err) throw err;
+        console.log(result);
         res.render('chats', {
             chats: result[0],
             currentUser: req.user.user_id,

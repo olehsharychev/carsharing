@@ -1,10 +1,10 @@
 extends layout
 block content
+
 	div.chats-wrapper
-		div.chats-wrapper
-			- chats.forEach(function(item) {
-				a(href="/chats/chat-with-#{item.chat_with_id}")= item.chat_with_user
-			- });
+		- chats.forEach(function(item) {
+			a(href="/chats/chat-with-#{item.chat_with_id}")= item.chat_with_user
+		- });
 
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")
 	script(src="/javascripts/popper.min.js", type="text/javascript")

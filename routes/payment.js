@@ -19,12 +19,13 @@ router.get('/:ad_id', authentication, function(req, res, next) {
                  SELECT @author_id := ad_author_id, ad_price FROM ad WHERE ad_id = @bid_ad_id;
                  SELECT user_cardnum AS receiver_cardnum FROM user WHERE user_id = @author_id;
                  SELECT user_telnum AS sender_telnum FROM user WHERE user_id = ${req.user.user_id}`;
+
     con.query(query, function (err, result) {
         if (err) throw err;
 
         // если результат пустой, значит зашли на страницу не с акка, у которого подтверждена заявка
         // в таком случае отправляем статус 404
-        if (result.length == 0){
+        if (result[0].length === 0){
             res.sendStatus(404);
         }
         else {

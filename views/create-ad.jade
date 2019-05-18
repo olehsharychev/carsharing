@@ -1,50 +1,43 @@
 extends layout
 block content
-	form(action="/create" method="POST" enctype="multipart/form-data", id="creation-form", onsubmit="return checkCoordinates()")
-		pre Choose some photos (max 10)
-		input(type="file", name="carPhoto", multiple, required)
-		br
-		pre Enter tittle
-		br
-		input(type="text", name="tittle", required)
-		br
-		pre Enter description
-		br
-		input(type="text", name="description", required)
-		br
-		pre Enter price
-		br
-		input(type="number", name="price", required)
-		br
-		pre Enter car brand
-		br
-		input(type="text", name="brand", required)
-		br
-		pre Enter car model
-		br
-		input(type="text", name="model", required)
-		br
-		pre Enter car engine liters
-		br
-		input(type="number", name="engine", required)
-		br
-		pre Enter car engine power
-		br
-		input(type="number", name="power", required)
-		br
-		pre Enter car year
-		br
-		input(type="number", name="year", required)
-		br
-		pre Enter car mileage
-		br
-		input(type="number", name="mileage", required)
-		input(type="text", id="lat", name="lat", hidden)
-		input(type="text", id="lng", name="lng", hidden)
-		br
-		p(class="no-coordinates-warn hidden") Пожалуйста, поставьте отметку о расположении автомобиля на карте
-		input(type="submit", name="submit")
-	br
+	div(class="create-ad-main-wrapper")
+		form(
+			action="/create",
+			method="POST",
+			enctype="multipart/form-data",
+			id="creation-form",
+			onsubmit="return checkCoordinates()"
+		)
+			div(class="form-group")
+				label(for="photos") Выберите фотографии автомобиля (максимум 10 штук)
+				input(type="file", name="carPhoto", id="photos", class="form-control-file", multiple, required)
+
+			mixin creationInput(id, i, label, type, name)
+				div(class="form-group")
+					label(for="#{id}") #{label}
+					div(class="input-group")
+						div(class="input-group-prepend")
+							span(class="input-group-text")
+								i(class="#{i}")
+						input(type="#{type}", name="#{name}", id="#{id}", class="form-control", required)
+
+			+creationInput("title", "fas fa-heading", "Введите название объявления", "text", "tittle")
+			+creationInput("description", "fas fa-pen", "Введите описание объявления", "text", "description")
+			+creationInput("price", "fas fa-tag", "Введите цену аренды в день", "number", "price")
+			+creationInput("brand", "fas fa-car", "Введите марку автомобиля", "text", "brand")
+			+creationInput("model", "fas fa-car-side", "Введите модель автомобиля", "text", "model")
+			+creationInput("engine", "fas fa-filter", "Введите объем двигателя автомобиля", "number", "engine")
+			+creationInput("power", "fas fa-tachometer-alt", "Введите мощность двигателя автомобиля", "number", "power")
+			+creationInput("year", "far fa-calendar-check", "Введите год выпуска автомобиля", "number", "year")
+			+creationInput("mileage", "fas fa-arrows-alt-h", "Введите пробег автомобиля", "number", "mileage")
+
+			div(class="alert alert-danger no-coordinates-warn hidden", role="alert")
+				span Пожалуйста, поставьте отметку о расположении автомобиля на карте
+			input(type="text", id="lat", name="lat", hidden)
+			input(type="text", id="lng", name="lng", hidden)
+			input(type="submit", name="submit", class="btn btn-primary w-100", value="Создать")
+
+	div(class="map-label") Выберите место расположения автомобиля на карте
 	div(id="map")
 
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")
