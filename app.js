@@ -155,6 +155,8 @@ app.post('', function (req, res, next) {
     var buff = Buffer.from(req.body.data, 'base64');
     var responseJSON = JSON.parse(buff.toString('utf-8'));
 
+    console.log(responseJSON);
+
     // если платеж успешный, то записываем в бд информацию об этом
     if (responseJSON.status === 'sandbox' || responseJSON.status === 'success'){
         var query = `UPDATE bid SET bid_paid = '1' WHERE bid_id = ${responseJSON.order_id}`;

@@ -1,110 +1,151 @@
 extends layout
 block content
 	div.view-main-wrapper
-		div.wrapper
-			div.slider
-				- var i = 0;
-				- car[1].images.forEach(function(item) {
-					img(src="/uploads/ad_photos/#{item.image_path}")
-					- i++;
-				- });
-			div.data-wrapper
-				- if (car[0].ad_author_id == car[0].user_id) {
-					a(href="/cars/edit-car/#{car[0].ad_id}") Редактировать объявление
-				- };
+		div(class="container-fluid")
+			div(class="row")
+				div(class="col-md-6 col-12")
+					div.slider
+						- var i = 0;
+						- car[1].images.forEach(function(item) {
+							img(src="/uploads/ad_photos/#{item.image_path}")
+							- i++;
+						- });
+				div(class="col-md-6 col-12")
+					div(class="row pl-3")
+						- if (car[0].ad_author_id == car[0].user_id) {
+							a(href="/cars/edit-car/#{car[0].ad_id}") Редактировать объявление
+						- };
+					div(class="row pl-3")
+						h4= car[0].ad_tittle
 
-				h3= car[0].ad_tittle
-				div.list
-					div.list__item
-						p Производитель
-						p= car[0].car_brand
-					div.list__item
-						p Модель
-						p= car[0].car_model
-					div.list__item
-						p Объем двигателя (литры)
-						p= car[0].car_engine
-					div.list__item
-						p Мощность двигателя
-						p= car[0].car_power
-					div.list__item
-						p Год выпуска
-						p= car[0].car_year
-					div.list__item
-						p Пробег
-						p= car[0].car_mileage
+					div(class="row pl-3 mb-2")
+						a(href="/profile/#{car[0].ad_author_id}") Профиль автора
+
+					mixin info(label, value, i)
+						div(class="row")
+							div(class="col-md-4")
+								p(class="border-secondary border-bottom")	#[i(class="#{i}")] #{label}
+							div(class="col-md-8")
+								p #{value}
+
+					+info("Цена", car[0].ad_price + " грн в день", "fas fa-money-bill-wave")
+					+info("Марка", car[0].car_brand, "fas fa-car")
+					+info("Модель", car[0].car_model, "fas fa-car-side")
+					+info("Объем двигателя (литры)", car[0].car_engine, "fas fa-filter")
+					+info("Мощность двигателя", car[0].car_power, "fas fa-tachometer-alt")
+					+info("Год выпуска", car[0].car_year, "far fa-calendar-check")
+					+info("Пробег", car[0].car_mileage, "fas fa-arrows-alt-h")
+
+					div(class="row")
+						div(class="col-md-4 col-12")
+							p(class="border-secondary border-bottom") #[i(class="fas fa-cog")] Коробка передач
+						div(class="col-md-8 col-12")
+							- if(car[0].car_transmition_id == 1)
+								p Механическая
+							- else
+								- if (car[0].car_transmition_id == 2)
+									p Автоматическая
+								- else
+									p Другая
+
+					+info("Можно арендовать", "период", "far fa-calendar-alt")
+					//div(class="row")
+					//	div(class="col-4")
+					//		p(class="border-secondary border-bottom") Можно арендовать
+					//	div(class="col-8")
+					//		p период
+
 		div.description
 			p= car[0].ad_description
 
 		div.map-wrapper
 			div(id="map")
 
-		div.bids-header
-			h3 Заявки
-			- if (car[2].bids.map(function(item) {return item.bid_author_id; }).indexOf(car[0].user_id) === -1){
-				- if (car[0].user_role_id == 2 || car[0].user_role_id == 1){
-					form(action="/cars/view-car/send-bid/#{car[0].ad_id}", method="POST")
-						p Комментарий к заявке:
-						br
-						input(type="text" name="bidDescription")
-						br
-						p Предлагаемая цена:
-						br
-						input(type="number" name="bidPrice")
-						br
-						input(type="submit" value="Отправить")
-				- }
-			- }
 
-		div.bids-comments
-			div.bids-wrapper
-				- var confirmedExist = car[2].bids.map(function(item) {return item.bid_confirmed; }).indexOf(1);
-				- car[2].bids.forEach(function(item) {
-					div.bid
-						div.bid__author
-							p= item.user_login
-						div.bid__description
-							p= item.bid_description
-						div.bid__price
-							p= item.bid_price
-						div.bid__datetime
-						div
-							// автор заявки может ее удалить
-							- if (car[0].user_id == item.bid_author_id){
-								a(href="/cars/view-car/#{car[0].ad_id}/delete-bid/#{item.bid_id}") Удалить
-								br
-							- }
-							// только автор объявления может подтверждать заявки и все заявки не подтверждены
-							- if (car[0].ad_author_id == car[0].user_id && item.bid_confirmed == 0 && confirmedExist == -1) {
-								a(href="/cars/view-car/#{car[0].ad_id}/confirm-bid/#{item.bid_id}") Подтвердить
-								br
-							- }
-							// если заявка подтверждена автором объявления, то арендатор может оплатить
-							- if (car[0].user_id == item.bid_author_id && item.bid_confirmed == 1 && item.bid_paid == 0) {
-								a(href="/cars/payment/#{car[0].ad_id}") Оплатить
-								br
-							- }
-				- });
+		div(class="container-fluid")
+			div(class="row")
+				div(class="col-12 col-md-6")
+					h4 Заявки
 
-			div.comments-wrapper
+					- if (car[2].bids.map(function(item) {return item.bid_author_id; }).indexOf(car[0].user_id) === -1)
+						- if (car[0].user_role_id == 2 || car[0].user_role_id == 1)
+							form(action="/cars/view-car/send-bid/#{car[0].ad_id}", method="POST", class="send-bid-form")
+								div(class="form-group")
+									textarea(
+										type="text",
+										name="bidDescription",
+										id="bidDescription",
+										class="form-control",
+										placeholder="Введите комментарий к заявке"
+									)
+								div(class="form-group")
+									input(type="submit" value="Добавить", class="btn btn-outline-primary")
 
-				form(action="/cars/view-car/send-comment/#{car[0].ad_id}", method="POST", class="comment-form")
-					input(type="text" name="commentText" placeholder="Введите комментарий" class="comment-form__text")
-					input(type="submit" name="submit" value="Отправить" class="comment-form__send")
+					mixin bidMixin(borderClass, item)
+						div(class="row border #{borderClass} rounded mt-2 ml-1 mr-1")
+							div(class="col-11")
+								div(class="row")
+									div(class="col-6")
+										span= item.user_login
+									div(class="col-6 d-flex justify-content-end")
+										span= item.bid_datetime
 
-				div.comments-list
+								div(class="row")
+									div(class="col-12")
+										span= item.bid_description
 
-					- car[3].comments.forEach(function(item) {
+							div(class="col-1 pr-1 d-flex align-items-end justify-content-start flex-column")
+								// автор заявки может ее удалить
+								- if (car[0].user_id == item.bid_author_id){
+									a(href="/cars/view-car/#{car[0].ad_id}/delete-bid/#{item.bid_id}")
+										i(class="fas fa-times")
+									br
+								- }
+								// только автор объявления может подтверждать заявки и все заявки не подтверждены
+								- if (car[0].ad_author_id == car[0].user_id && item.bid_confirmed == 0 && confirmedExist == -1) {
+									a(href="/cars/view-car/#{car[0].ad_id}/confirm-bid/#{item.bid_id}")
+										i(class="fas fa-check-square")
+									br
+								- }
+								// если заявка подтверждена автором объявления, то арендатор может оплатить
+								- if (car[0].user_id == item.bid_author_id && item.bid_confirmed == 1 && item.bid_paid == 0) {
+									a(href="/cars/payment/#{car[0].ad_id}")
+										i(class="fas fa-money-bill-wave")
+									br
+								- }
+					div.bids-wrapper
+						- var confirmedExist = car[2].bids.map(function(item) {return item.bid_confirmed; }).indexOf(1);
+						- car[2].bids.forEach(function(item) {
+							- if(item.bid_confirmed == 1 && item.bid_paid == 0)
+								+bidMixin("border-primary", item)
+							- if(item.bid_paid == 1)
+								+bidMixin("border-success", item)
+							- if(item.bid_paid == 0 && item.bid_confirmed == 0)
+								+bidMixin("border-secondary", item)
+						- });
 
-						div.comment
-							div.comment__author
-								p= item.user_login
-							div.comment__datetime
-								p= item.comment_datetime
-							div.comment__text
-								p= item.comment_text
+				div(class="col-12 col-md-6")
+					h4 Комментарии
 
-					- });
+					form(action="/cars/view-car/send-comment/#{car[0].ad_id}", method="POST", class="send-comment-form")
+						div(class="form-group")
+							textarea(name="commentText", placeholder="Введите комментарий", class="form-control")
+						div(class="form-group")
+							input(type="submit" name="submit" value="Отправить" class="btn btn-outline-primary send-comment-btn")
+
+					div.comments-list
+
+						- car[3].comments.forEach(function(item) {
+
+							div(class="row border border-secondary rounded mt-2 ml-1 mr-1")
+								div(class="col-6")
+									span= item.user_login
+								div(class="col-6 d-flex justify-content-end")
+									span= item.comment_datetime
+								div(class="col-12")
+									span= item.comment_text
+
+						- });
 
 
 	span(class="hidden", id="lat")= car[0].ad_lat

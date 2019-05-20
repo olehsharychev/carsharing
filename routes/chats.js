@@ -13,7 +13,8 @@ router.get('/', authentication, function (req, res, next) {
                  message.message_recipient_id, 
                  message.message_author_id) 
                  AS chat_with_id,
-                 user.user_login AS chat_with_user
+                 user.user_login AS chat_with_user,
+                 user.user_photo_path
                  FROM message, user
                  WHERE (message.message_author_id = ${req.user.user_id} 
                  OR message.message_recipient_id = ${req.user.user_id})
@@ -25,11 +26,16 @@ router.get('/', authentication, function (req, res, next) {
                  SELECT COUNT(message_unread) AS amount_unread FROM message WHERE 
                  message_unread = 1 
                  AND 
-                 message_recipient_id = ${req.user.user_id};`;
+                 message_recipient_id = ${req.user.user_id};
+                 SELECT * FROM message WHERE 
+                 message_author_id = ${req.user.user_id} 
+                 OR 
+                 message_recipient_id = ${req.user.user_id}`;
 
     con.query(query, function (err, result) {
         if (err) throw err;
-        console.log(result);
+        //console.log(result);
+
         res.render('chats', {
             chats: result[0],
             currentUser: req.user.user_id,
@@ -47,7 +53,7 @@ router.get('/chat-with-:user_id', authentication, function (req, res, next) {
                  message_author_id = ${req.params.user_id}
                  AND
                  message_recipient_id = ${req.user.user_id};
-                 SELECT message.*, user.user_login message_author 
+                 SELECT message.*, user.user_login message_author, user.user_photo_path 
                  FROM message
                  LEFT JOIN user ON user.user_id = message.message_author_id 
                  WHERE
@@ -70,7 +76,12 @@ router.get('/chat-with-:user_id', authentication, function (req, res, next) {
     else {
         con.query(query, function (err, result) {
             if (err) throw err;
-            console.log(result);
+            //console.log(result);
+            result[1].forEach(function (item) {
+                moment.locale('ru');
+                item.message_datetime = moment(item.message_datetime).format('LLLL');
+            });
+            console.log(result[1]);
             res.render('messages', {
                 messages: result[1],
                 recipient_id: req.params.user_id,

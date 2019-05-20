@@ -1,50 +1,59 @@
 extends layout
 block content
 	div.profile-wrapper
-		img(class="user-photo", src="/uploads/user_photos/#{user[0][0].user_photo_path}")
-		div.user-login
-			p= user[0][0].user_login
-		div.user-role
-			- if (user[0][0].user_role_id == 3)
-				p Арендодатель
-			- if (user[0][0].user_role_id == 2)
-				p Арендатор
-		- if (currentUser !== user[0][0].user_id)
-			a(href="/chats/chat-with-#{user[0][0].user_id}") Отправить сообщение
-		div.user-rating
+		div.container-fluid
+			div.row
+				div.col-12.photo-wrapper.mt-2
+					img(class="user-photo", src="/uploads/user_photos/#{user[0][0].user_photo_path}")
+				div.col-12.mt-2
+					span.border-bottom.border-secondary= "Имя пользователя: " + user[0][0].user_login
+				div.col-12.mt-2
+					- if (user[0][0].user_role_id == 3)
+						span.border-bottom.border-secondary Арендодатель
+					- if (user[0][0].user_role_id == 2)
+						span.border-bottom.border-secondary Арендатор
+				div.col-12.mt-2
+					- if (currentUser !== user[0][0].user_id)
+						a(href="/chats/chat-with-#{user[0][0].user_id}") Отправить сообщение
+				div.col-12.mt-2
 
-			// проверяем голосовал ли уже текущий пользователь за пользователя,
-			// страница которого открыта в данный момент
-			- if (user[2].map(function(item) { return item.voted_user_id; }).indexOf(currentUser) === -1)
-				- if (currentUser !== user[0][0].user_id)
-					a(class="user-rating__plus", href="/profile/vote-rating-plus/#{user[0][0].user_id}") +
-			span(class="user-rating__number")= user[0][0].user_rating
-			- if (user[2].map(function(item) { return item.voted_user_id; }).indexOf(currentUser) === -1)
-				- if (currentUser !== user[0][0].user_id)
-					a(class="user-rating__minus", href="/profile/vote-rating-minus/#{user[0][0].user_id}") -
-		div.user-data
-			div.user-data__surname
-				span= user[0][0].user_surname
-			div.user-data__name
-				span= user[0][0].user_firstname
-		div.user-email
-			span Электронная почта:
-			span= user[0][0].user_email
-		div.user-telnum
-			span Номер телефона:
-			span= user[0][0].user_telnum
+					// проверяем голосовал ли уже текущий пользователь за пользователя,
+					// страница которого открыта в данный момент
+					- if (user[2].map(function(item) { return item.voted_user_id; }).indexOf(currentUser) === -1)
+						- if (currentUser !== user[0][0].user_id)
+							a(class="user-rating__plus", href="/profile/vote-rating-plus/#{user[0][0].user_id}")
+								i(class="fas fa-thumbs-up")
+					span(class="user-rating__number")= "  " + user[0][0].user_rating + "  "
+					- if (user[2].map(function(item) { return item.voted_user_id; }).indexOf(currentUser) === -1)
+						- if (currentUser !== user[0][0].user_id)
+							a(class="user-rating__minus", href="/profile/vote-rating-minus/#{user[0][0].user_id}")
+								i(class="fas fa-thumbs-down")
+
+				div.col-12.mt-2
+					span.border-bottom.border-secondary= "Фамилия: " + user[0][0].user_surname
+
+				div.col-12.mt-2
+					span.border-bottom.border-secondary= "Имя: " + user[0][0].user_firstname
+
+				div.col-12.mt-2
+					span.border-bottom.border-secondary= "Электронная почта: " + user[0][0].user_email
+
+				div.col-12.mt-2
+					span
+					span.border-bottom.border-secondary= "Номер телефона: " + user[0][0].user_telnum
 		div.user-ads
-			h3 Объявления пользователя:
-			- user[1].forEach(function(item) {
-				div(class="user-ads__item")
-					img(src="/uploads/ad_photos/#{item.image_path}", class="photo")
-					div.info
-						a(href="/cars/view-car/#{item.ad_id}")
-							h3= item.ad_tittle
-						p= item.ad_description
-						p= item.car_brand
-						p= item.car_model
-			- });
+			- if(user[1].length !== 0)
+				h4.mt-3.ml-4 Объявления пользователя:
+			div(class="cards-wrapper")
+				- user[1].forEach(function(item) {
+					div(class="card bg-light border-secondary car-card")
+						img(src="/uploads/ad_photos/#{item.image_path}", class="card-img-top car-photo")
+						div(class="card-body")
+							a(href="/cars/view-car/#{item.ad_id}")
+								h4(class="card-title")= item.ad_tittle
+							h6(class="card-subtitle")= item.car_brand + " " + item.car_model
+							p(class="card-text")= item.ad_description
+				- });
 
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")
 	script(src="/javascripts/popper.min.js", type="text/javascript")

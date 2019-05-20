@@ -1,19 +1,26 @@
 extends layout
 block content
 	div.messages-wrapper
-		- messages.forEach(function(message) {
-			div.message
-				div.message__author
-					p= message.message_author
-				div.message__text
-					p= message.message_text
-		- });
+		div(class="container")
+			- messages.forEach(function(message) {
+				div(class="row mt-2 border border-primary rounded")
+					div(class="col-2 p-0")
+						img(src="/uploads/user_photos/#{message.user_photo_path}", class="user-photo rounded-left")
+					div(class="col-10 pl-4")
+						div(class="row justify-content-between")
+							a(href="/profile/#{message.message_author_id}")= message.message_author
+							span= message.message_datetime
+						div(class="row mt-2")
+							span= message.message_text
+			- });
 
 
-	form(action="/chats/send-message-to-#{recipient_id}", method="POST")
-		input(type="text", name="messageText", placeholder="Введите сообщение")
-		br
-		input(type="submit", name="submit" value="Отправить")
+		form(action="/chats/send-message-to-#{recipient_id}", method="POST", class="send-message-form")
+			div(class="form-group")
+				label(for="message")
+				textarea(name="messageText", placeholder="Введите сообщение", id="message", class="form-control")
+			div(class="form-group")
+				input(type="submit", name="submit" value="Отправить", class="btn btn-outline-primary w-100")
 
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")
 	script(src="/javascripts/popper.min.js", type="text/javascript")

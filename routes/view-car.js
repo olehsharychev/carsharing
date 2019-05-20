@@ -34,6 +34,11 @@ router.get('/:ad_id', authentication, function(req, res, next) {
                                 where bid.ad_id = ${adId}`;
                 con.query(bidQuery, function (err, result, fields) {
                     if (err) throw err;
+                    console.log(result);
+                    result.forEach(function (item) {
+                        moment.locale('ru');
+                        item.bid_datetime = moment(item.bid_datetime).format('LLL');
+                    });
                     car[car.length] = {bids: result};
 
                     // получение списка комментариев
@@ -47,6 +52,10 @@ router.get('/:ad_id', authentication, function(req, res, next) {
                                          message_recipient_id = ${req.user.user_id};`;
                     con.query(comMesQuery, function (err, result, fields) {
                         if (err) throw err;
+                        result[0].forEach(function (item) {
+                            moment.locale('ru');
+                            item.comment_datetime = moment(item.comment_datetime).format('LLL');
+                        });
                         car[car.length] = {comments: result[0]};
                         res.render('view-car', {
                             car: car,
@@ -123,7 +132,6 @@ router.post('/send-bid/:ad_id', authentication, function(req, res) {
                  ${req.params.ad_id},
                  ${req.user.user_id},
                  '${req.body.bidDescription}',
-                 ${req.body.bidPrice},
                  STR_TO_DATE("${datetime}", "%Y-%m-%d %H:%i:%s"),
                  '0',
                  '0')`;
