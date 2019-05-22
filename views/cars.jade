@@ -2,15 +2,168 @@ extends layout
 block content
 	div.cars-wrapper
 		form(action="/cars/search", method="GET", class="search-form form-inline")
-			div(class="input-group")
-				div(class="input-group-prepend")
-					span(class="input-group-text")
-						i(class="fas fa-search")
-				input(type="text", name="searchData", id="search", class="form-control")
-			input(type="submit", name="submit", value="Поиск", class="btn btn-outline-primary ml-2")
+			div.container.border.border-dark.rounded.bg-light.p-2
+				div.row
+					div.col-12.d-flex.justify-content-center
+						h4 Поиск
+				div.row
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="title") Название объявления
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-heading")
+								input(type="text", name="searchTitle", id="title", class="form-control")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="brand") Производитель
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-car")
+								input(type="text", name="searchBrand", id="brand", class="form-control")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="model") Модель
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-car-side")
+								input(type="text", name="searchModel", id="model", class="form-control")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="transmission") Коробка передач
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-cog")
+								select(size="1", name="searchTransmission", id="transmission", class="form-control")
+									option(value="", selected) Любая
+									option(value="Ручная") Ручная
+									option(value="Автоматическая") Автоматическая
+									option(value="Другая") Другая
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="price") Цена
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-tag")
+								input(
+									type="number",
+									name="searchPriceFrom",
+									min="0",
+									id="price",
+									class="form-control",
+									placeholder="От")
+								input(
+									type="number",
+									name="searchPriceTo",
+									min="0",
+									class="form-control",
+									placeholder="До")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="engine") Объем двигателя
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-filter")
+								input(
+									type="number",
+									name="searchEngineFrom",
+									min="0", max="9999",
+									step="0.1",
+									class="form-control",
+									id="engine",
+									placeholder="От")
+								input(
+									type="number",
+									name="searchEngineTo",
+									min="0",
+									max="9999",
+									step="0.1",
+									class="form-control",
+									placeholder="До")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="power") Мощность двигателя
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-tachometer-alt")
+								input(
+									type="number",
+									name="searchPowerFrom",
+									min="0",
+									max="9999",
+									class="form-control",
+									id="power",
+									placeholder="От")
+								input(
+									type="number",
+									name="searchPowerTo",
+									min="0",
+									max="9999",
+									class="form-control",
+									placeholder="До")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="year") Год выпуска
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="far fa-calendar-check")
+								input(
+									type="number",
+									name="searchYearFrom",
+									min="1900",
+									max="9999",
+									class="form-control",
+									id="year",
+									placeholder="От")
+								input(
+									type="number",
+									name="searchYearTo",
+									min="1900",
+									max="9999",
+									class="form-control",
+									placeholder="До")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="mileage") Пробег
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-arrows-alt-h")
+								input(
+									type="number",
+									name="searchMileageFrom",
+									min="0",
+									class="form-control",
+									id="mileage",
+									placeholder="От")
+								input(
+									type="number",
+									name="searchMileageTo",
+									min="0",
+									class="form-control",
+									placeholder="До")
+				div.row
+					div.col-12
+						div(class="input-group d-flex justify-content-center mt-3 w-100")
+							input(type="submit", name="submit", value="Поиск", class="btn btn-outline-success w-25")
 
 		//div(class="card-deck")
-
 		div(class="cards-wrapper")
 
 			- adList.forEach(function(item) {
