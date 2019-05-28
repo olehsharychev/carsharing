@@ -1,17 +1,18 @@
 extends layout
 block content
 	div(class="registration-main-wrapper")
-		form(action="/registration/register", method="post", enctype="multipart/form-data")
+		form(action="/profile/edit/save/#{user.user_id}", method="post", enctype="multipart/form-data")
 			div(class="form-group")
 				label(for="login") Имя пользователя
 				div(class="input-group")
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="fas fa-user")
-					input(type="text", name="login", id="login", required, class="form-control")
+					input(type="text", name="login", id="login", required, class="form-control",
+						value="#{user.user_login}", readonly)
 
 			div(class="form-group")
-				label(for="password") Пароль
+				label(for="password") Новый пароль
 				div(class="input-group")
 					div(class="input-group-prepend")
 						span(class="input-group-text")
@@ -19,18 +20,7 @@ block content
 					input(type="password", name="password", id="password", required, class="form-control")
 
 			div(class="form-group")
-				label(for="selectRole") Выберите роль
-				div(class="input-group")
-					div(class="input-group-prepend")
-						span(class="input-group-text")
-							i(class="fas fa-user-tag")
-					select(size="1", name="role", id="selectRole", class="form-control")
-						option(value="1", disabled) Администратор
-						option(value="2", selected) Арендатор
-						option(value="3") Арендодатель
-
-			div(class="form-group")
-				label(for="choosePhoto") Выберите фотографию пользователя
+				label(for="choosePhoto") Выберите новую фотографию пользователя
 				input(type="file", name="userPhoto", required, id="choosePhoto", class="form-control-file")
 
 			div(class="form-group")
@@ -39,7 +29,8 @@ block content
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="far fa-address-card")
-					input(type="text", name="firstName", id="firstName", required, class="form-control")
+					input(type="text", name="firstName", id="firstName", required, class="form-control",
+						value="#{user.user_firstname}", readonly)
 
 			div(class="form-group")
 				label(for="surname") Ваша фамилия
@@ -47,34 +38,38 @@ block content
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="far fa-address-card")
-					input(type="text", name="surname", id="surname", required, class="form-control")
+					input(type="text", name="surname", id="surname", required, class="form-control",
+						value="#{user.user_surname}", readonly)
 
 			div(class="form-group")
-				label(for="email") Электронная почта
+				label(for="email") Новая электронная почта
 				div(class="input-group")
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="fas fa-at")
-					input(type="email", name="email", required, id="email", class="form-control")
+					input(type="email", name="email", required, id="email", class="form-control",
+						value="#{user.user_email}")
 
 			div(class="form-group")
-				label(for="telnum") Номер телефона в международном формате
+				label(for="telnum") Новый номер телефона в международном формате
 				div(class="input-group")
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="fas fa-phone")
-					input(type="tel", name="telnum", required, id="telnum", class="form-control")
+					input(type="tel", name="telnum", required, id="telnum", class="form-control",
+						value="#{user.user_telnum}")
 
 			div(class="form-group")
-				label(for="cardnum") Номер банковской карты, на которую будет осуществлятся оплата аренды
+				label(for="cardnum") Новый номер банковской карты, на которую будет осуществлятся оплата аренды
 				div(class="input-group")
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="far fa-credit-card")
-					input(type="text", name="cardnum", required, id="cardnum", class="form-control")
+					input(type="text", name="cardnum", required, id="cardnum", class="form-control",
+						value="#{user.user_cardnum}")
 
 			div(class="form-group")
-				input(type="submit", value="Зарегистрироваться", class="btn btn-primary w-100")
+				input(type="submit", value="Сохранить данные", class="btn btn-primary w-100")
 
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")
 	script(src="/javascripts/popper.min.js", type="text/javascript")

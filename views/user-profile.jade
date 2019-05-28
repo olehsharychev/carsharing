@@ -5,6 +5,9 @@ block content
 			div.row
 				div.col-12.photo-wrapper.mt-2
 					img(class="user-photo", src="/uploads/user_photos/#{user[0][0].user_photo_path}")
+				- if (currentUser == user[0][0].user_id)
+					div.col-12.mt-2
+						a(href="/profile/edit/#{user[0][0].user_id}") Редактировать профиль
 				div.col-12.mt-2
 					span.border-bottom.border-secondary= "Имя пользователя: " + user[0][0].user_login
 				div.col-12.mt-2
@@ -53,6 +56,18 @@ block content
 								h4(class="card-title")= item.ad_tittle
 							h6(class="card-subtitle")= item.car_brand + " " + item.car_model
 							p(class="card-text")= item.ad_description
+							div(class="card-text border-bottom border-secondary")
+								span #[i(class="fas fa-money-bill-wave mr-2")] #{item.ad_price} грн в день
+							div(class="card-text border-bottom border-secondary")
+								span #[i(class="fas fa-filter mr-2")] #{item.car_engine} л
+							div(class="card-text border-bottom border-secondary")
+								span #[i(class="fas fa-tachometer-alt mr-2")] #{item.car_power} л.с.
+							div(class="card-text border-bottom border-secondary")
+								span #[i(class="far fa-calendar-check mr-2")] #{item.car_year} г
+							div(class="card-text border-bottom border-secondary")
+								span #[i(class="fas fa-arrows-alt-h mr-2")] #{item.car_mileage} км
+							div(class="card-text border-bottom border-secondary")
+								span #[i(class="far fa-calendar-alt mr-2")] С #{item.ad_date_from} по #{item.ad_date_to}
 				- });
 
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")

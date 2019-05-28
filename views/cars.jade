@@ -49,27 +49,6 @@ block content
 
 					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
 						div.form-group
-							label(for="price") Цена
-							div(class="input-group w-100")
-								div(class="input-group-prepend")
-									span(class="input-group-text")
-										i(class="fas fa-tag")
-								input(
-									type="number",
-									name="searchPriceFrom",
-									min="0",
-									id="price",
-									class="form-control",
-									placeholder="От")
-								input(
-									type="number",
-									name="searchPriceTo",
-									min="0",
-									class="form-control",
-									placeholder="До")
-
-					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
-						div.form-group
 							label(for="engine") Объем двигателя
 							div(class="input-group w-100")
 								div(class="input-group-prepend")
@@ -158,6 +137,46 @@ block content
 									min="0",
 									class="form-control",
 									placeholder="До")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="price") Цена аренды
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="fas fa-tag")
+								input(
+									type="number",
+									name="searchPriceFrom",
+									min="0",
+									id="price",
+									class="form-control",
+									placeholder="От")
+								input(
+									type="number",
+									name="searchPriceTo",
+									min="0",
+									class="form-control",
+									placeholder="До")
+
+					div.col-xl-3.col-lg-4.col-md-6.col-sm-6.col-12
+						div.form-group
+							label(for="date") Период аренды
+							div(class="input-group w-100")
+								div(class="input-group-prepend")
+									span(class="input-group-text")
+										i(class="far fa-calendar-alt")
+								input(
+									type="date",
+									name="searchDateFrom",
+									id="date",
+									class="form-control",
+									placeholder="От")
+								input(
+									type="date",
+									name="searchDateTo",
+									class="form-control",
+									placeholder="До")
 				div.row
 					div.col-12
 						div(class="input-group d-flex justify-content-center mt-3 w-100")
@@ -174,6 +193,18 @@ block content
 							h4(class="card-title")= item.ad_tittle
 						h6(class="card-subtitle")= item.car_brand + " " + item.car_model
 						p(class="card-text")= item.ad_description
+						div(class="card-text border-bottom border-secondary")
+							span #[i(class="fas fa-money-bill-wave mr-2")] #{item.ad_price} грн в день
+						div(class="card-text border-bottom border-secondary")
+							span #[i(class="fas fa-filter mr-2")] #{item.car_engine} л
+						div(class="card-text border-bottom border-secondary")
+							span #[i(class="fas fa-tachometer-alt mr-2")] #{item.car_power} л.с.
+						div(class="card-text border-bottom border-secondary")
+							span #[i(class="far fa-calendar-check mr-2")] #{item.car_year} г
+						div(class="card-text border-bottom border-secondary")
+							span #[i(class="fas fa-arrows-alt-h mr-2")] #{item.car_mileage} км
+						div(class="card-text border-bottom border-secondary")
+							span #[i(class="far fa-calendar-alt mr-2")] С #{item.ad_date_from} по #{item.ad_date_to}
 			- });
 
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")

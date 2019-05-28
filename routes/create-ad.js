@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var con = require('../lib/connection.js');
 var multer  = require('multer');
+var moment = require('moment');
 var authentication = require('../lib/authentication');
 
 var storage = multer.diskStorage({
@@ -29,7 +30,8 @@ router.get('/', authentication, function (req, res, next) {
             res.render('create-ad', {
                 currentUser: req.user.user_id,
                 currentRole: req.user.user_role_id,
-                amountUnread: result[0].amount_unread
+                amountUnread: result[0].amount_unread,
+                moment: moment
             });
         }
         else {
@@ -38,15 +40,17 @@ router.get('/', authentication, function (req, res, next) {
     });
 });
 
-router.post('/', upload.array('carPhoto', 10), function (req, res) {
+router.post('/', authentication, upload.array('carPhoto', 10), function (req, res) {
     if (!req.body) return res.sendStatus(400);
 
+    var datetime = moment().format('YYYY-MM-DD HH:mm:ss');
+
+    console.log(req.body);
     var query = `INSERT INTO ad VALUES 
                 (NULL, 
-                '${req.body.tittle}',
+                '${req.body.title}',
                 '${req.body.description}',
-                '2018-10-29',
-                '0',
+                STR_TO_DATE("${datetime}", "%Y-%m-%d %H:%i:%s"),
                 '${req.body.price}',
                 ${req.user.user_id}, 
                 '${req.body.brand}',
@@ -55,7 +59,9 @@ router.post('/', upload.array('carPhoto', 10), function (req, res) {
                 '${req.body.power}',
                 '${req.body.year}',
                 '${req.body.mileage}',
-                '1',
+                '${req.body.transmission}',
+                '${req.body.dateFrom}',
+                '${req.body.dateTo}',
                 '${req.body.lat}',
                 '${req.body.lng}')`;
 

@@ -32,7 +32,8 @@ router.get('/:ad_id', authentication, function(req, res, next) {
 
             // формируем json для html формы с кнопкой оплаты
             var json = {
-                public_key: "i9221338865",
+                public_key: "sandbox_i91851286730",
+                private_key: "sandbox_xRwQvnkqHqN8lwvQA77VVbRd4nfoKJnUcMKHcUcM",
                 server_url: `http://${req.get('host')}`,
                 action: "p2p",
                 version: "3",
@@ -41,12 +42,11 @@ router.get('/:ad_id', authentication, function(req, res, next) {
                 currency: "UAH",
                 description: `Оплата по объявлению №${result[0][0].ad_id}, заявка №${result[0][0].bid_id}`,
                 order_id: `${result[0][0].bid_id}`,
-                receiver_card: `${result[2][0].receiver_cardnum}`,
-                sandbox: "1"
+                receiver_card: `${result[2][0].receiver_cardnum}`
             };
 
             // получение signature и data
-            var private_key = "11m1lvjWewQTlbZRiCnVuWU7vLJUjObSxoKdgvHY";
+            var private_key = "sandbox_xRwQvnkqHqN8lwvQA77VVbRd4nfoKJnUcMKHcUcM";
             var jsonString = JSON.stringify(json);
             var data = Buffer.from(jsonString).toString('base64');
             var signString = private_key + data + private_key;

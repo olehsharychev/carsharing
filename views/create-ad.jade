@@ -21,15 +21,84 @@ block content
 								i(class="#{i}")
 						input(type="#{type}", name="#{name}", id="#{id}", class="form-control", required)
 
-			+creationInput("title", "fas fa-heading", "Введите название объявления", "text", "tittle")
+			+creationInput("title", "fas fa-heading", "Введите название объявления", "text", "title")
 			+creationInput("description", "fas fa-pen", "Введите описание объявления", "text", "description")
 			+creationInput("price", "fas fa-tag", "Введите цену аренды в день", "number", "price")
 			+creationInput("brand", "fas fa-car", "Введите марку автомобиля", "text", "brand")
 			+creationInput("model", "fas fa-car-side", "Введите модель автомобиля", "text", "model")
-			+creationInput("engine", "fas fa-filter", "Введите объем двигателя автомобиля", "number", "engine")
-			+creationInput("power", "fas fa-tachometer-alt", "Введите мощность двигателя автомобиля", "number", "power")
-			+creationInput("year", "far fa-calendar-check", "Введите год выпуска автомобиля", "number", "year")
-			+creationInput("mileage", "fas fa-arrows-alt-h", "Введите пробег автомобиля", "number", "mileage")
+
+			div(class="form-group")
+				label(for="engine") Введите объем двигателя автомобиля
+				div(class="input-group")
+					div(class="input-group-prepend")
+						span(class="input-group-text")
+							i(class="fas fa-filter")
+					input(
+						type="number",
+						name="engine",
+						id="engine",
+						class="form-control",
+						required,
+						min="0",
+						max="9999",
+						step="0.1"
+					)
+
+			div(class="form-group")
+				label(for="power") Введите мощность двигателя автомобиля
+				div(class="input-group")
+					div(class="input-group-prepend")
+						span(class="input-group-text")
+							i(class="fas fa-tachometer-alt")
+					input(type="number", name="power", id="power", class="form-control", required, min="0", max="9999")
+
+			div(class="form-group")
+				label(for="year") Введите год выпуска автомобиля
+				div(class="input-group")
+					div(class="input-group-prepend")
+						span(class="input-group-text")
+							i(class="far fa-calendar-check")
+					input(type="number", name="year", id="year", class="form-control", required, min="1900", max="9999")
+
+			div(class="form-group")
+				label(for="mileage") Введите пробег автомобиля
+				div(class="input-group")
+					div(class="input-group-prepend")
+						span(class="input-group-text")
+							i(class="fas fa-arrows-alt-h")
+					input(type="number", name="year", id="mileage", class="form-control", required, min="0")
+
+			div.form-group
+				label(for="transmission") Выберите тип коробки передач
+				div(class="input-group w-100")
+					div(class="input-group-prepend")
+						span(class="input-group-text")
+							i(class="fas fa-cog")
+					select(size="1", name="transmission", id="transmission", class="form-control", required)
+						option(value="Ручная") Ручная
+						option(value="Автоматическая") Автоматическая
+						option(value="Другая") Другая
+
+			- var currentDate = moment().format('YYYY-MM-DD');
+			- var nextYear = moment().add(1, 'years').format('YYYY-MM-DD');
+
+			div(class="form-group")
+				label(for="dateFrom") Выберете дату начала аренды
+				div(class="input-group")
+					div(class="input-group-prepend")
+						span(class="input-group-text")
+							i(class="far fa-calendar-alt")
+					input(type="date", name="dateFrom", id="dateFrom", class="form-control", required,
+						min="#{currentDate}", max="#{nextYear}")
+
+			div(class="form-group")
+				label(for="dateTo") Выберете дату конца аренды
+				div(class="input-group")
+					div(class="input-group-prepend")
+						span(class="input-group-text")
+							i(class="far fa-calendar-alt")
+					input(type="date", name="dateTo", id="dateTo", class="form-control", required,
+						min="#{currentDate}", max="#{nextYear}")
 
 			div(class="alert alert-danger no-coordinates-warn hidden", role="alert")
 				span Пожалуйста, поставьте отметку о расположении автомобиля на карте

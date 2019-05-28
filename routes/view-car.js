@@ -21,6 +21,9 @@ router.get('/:ad_id', authentication, function(req, res, next) {
             var car = result;
             car[0].user_id = req.user.user_id;
             car[0].user_role_id = req.user.user_role_id;
+            moment.locale("ru");
+            car[0].ad_date_to = moment(car[0].ad_date_to).format('LL');
+            car[0].ad_date_from = moment(car[0].ad_date_from).format('LL');
 
             // получение всех фотографий объявления
             var imageQuery = `SELECT * FROM image WHERE ad_id = ${adId}`;

@@ -3,13 +3,21 @@ var router = express.Router();
 var mysql = require('mysql');
 var con = require('../lib/connection.js');
 var authentication = require('../lib/authentication');
+var moment = require('moment');
 
 router.get('/', function(req, res, next) {
 
     con.query(`SELECT * FROM ad, image WHERE ad.ad_id = image.ad_id GROUP BY ad.ad_id`, function (err, result, fields) {
         if (err) throw err;
         var adList = result;
+        adList.forEach(function (item) {
+            moment.locale('ru');
+            item.ad_date_from = moment(item.ad_date_from).format('LL');
+            item.ad_date_to = moment(item.ad_date_to).format('LL');
+            item.ad_datetime = moment(item.ad_datetime).format('LLL');
+        });
 
+        console.log(adList);
         var currentUser = 0;
         var currentRole = 0;
         if (req.user !== undefined){
@@ -67,6 +75,12 @@ router.get('/search', function (req, res, next) {
     if(req.query.searchMileageTo == ''){
         req.query.searchMileageTo = 99999999999;
     }
+    if(req.query.searchDateFrom == ''){
+        req.query.searchDateFrom = moment().subtract(2, 'years').format('YYYY-MM-DD');
+    }
+    if(req.query.searchDateTo == ''){
+        req.query.searchDateTo = moment().add(2, 'years').format('YYYY-MM-DD');
+    }
 
     var searchQuery = `SELECT * FROM ad, image WHERE 
                        ad.ad_id = image.ad_id
@@ -88,10 +102,20 @@ router.get('/search', function (req, res, next) {
                        (ad.car_year >= ${req.query.searchYearFrom} AND ad.car_year <= ${req.query.searchYearTo})
                        AND
                        (ad.car_mileage >= ${req.query.searchMileageFrom} AND ad.car_mileage <= ${req.query.searchMileageTo})
+                       AND
+                       (ad.ad_date_from >= '${req.query.searchDateFrom}' AND ad.ad_date_to <= '${req.query.searchDateTo}')
                        GROUP BY ad.ad_id`;
 
     con.query(searchQuery, function (err, result) {
         if (err) throw err;
+
+        result.forEach(function (item) {
+            moment.locale('ru');
+            item.ad_date_from = moment(item.ad_date_from).format('LL');
+            item.ad_date_to = moment(item.ad_date_to).format('LL');
+            item.ad_datetime = moment(item.ad_datetime).format('LLL');
+        });
+
         var currentUser = 0;
         var currentRole = 0;
         if (req.user !== undefined){
