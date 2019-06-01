@@ -120,6 +120,7 @@ passport.deserializeUser(function (id, done) {
 
 app.get('/logout', function (req, res) {
     req.logout();
+    //req.headers.referer
     res.redirect('/cars');
 });
 

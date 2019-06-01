@@ -8,20 +8,31 @@ block content
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="fas fa-user")
-					input(type="text", name="login", id="login", required, class="form-control",
-						value="#{user.user_login}", readonly)
+					span(id="login", class="form-control")= user.user_login
 
 			div(class="form-group")
-				label(for="password") Новый пароль
+				label(for="oldPassword") Старый пароль (необходим для подтверждения изменений)
 				div(class="input-group")
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="fas fa-key")
-					input(type="password", name="password", id="password", required, class="form-control")
+					input(type="password", name="oldPassword", id="oldPassword", required, class="form-control")
+
+			- if (wrongPass)
+				div(class="form-group")
+					div(class="alert alert-danger", role="alert") Неверный пароль
+
+			div(class="form-group")
+				label(for="newPassword") Новый пароль (оставить пустым, если не нужно менять пароль)
+				div(class="input-group")
+					div(class="input-group-prepend")
+						span(class="input-group-text")
+							i(class="fas fa-key")
+					input(type="password", name="newPassword", id="newPassword", class="form-control")
 
 			div(class="form-group")
 				label(for="choosePhoto") Выберите новую фотографию пользователя
-				input(type="file", name="userPhoto", required, id="choosePhoto", class="form-control-file")
+				input(type="file", name="userPhoto", id="choosePhoto", class="form-control-file")
 
 			div(class="form-group")
 				label(for="firstName") Ваше имя
@@ -29,8 +40,7 @@ block content
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="far fa-address-card")
-					input(type="text", name="firstName", id="firstName", required, class="form-control",
-						value="#{user.user_firstname}", readonly)
+					span(id="firstName", class="form-control")= user.user_firstname
 
 			div(class="form-group")
 				label(for="surname") Ваша фамилия
@@ -38,8 +48,7 @@ block content
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="far fa-address-card")
-					input(type="text", name="surname", id="surname", required, class="form-control",
-						value="#{user.user_surname}", readonly)
+					span(id="surname", class="form-control")= user.user_surname
 
 			div(class="form-group")
 				label(for="email") Новая электронная почта
