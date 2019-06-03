@@ -2,7 +2,7 @@ extends layout
 block content
 	div(class="create-ad-main-wrapper")
 		form(
-			action="/create",
+			action="/cars/view-car/edit/save/#{ad.ad_id}",
 			method="POST",
 			enctype="multipart/form-data",
 			id="creation-form",
@@ -10,22 +10,23 @@ block content
 		)
 			div(class="form-group")
 				label(for="photos") Выберите фотографии автомобиля (максимум 10 штук)
-				input(type="file", name="carPhoto", id="photos", class="form-control-file", multiple, required)
+				input(type="file", name="carPhoto", id="photos", class="form-control-file", multiple)
 
-			mixin creationInput(id, i, label, type, name)
+			mixin creationInput(id, i, label, type, name, value)
 				div(class="form-group")
 					label(for="#{id}") #{label}
 					div(class="input-group")
 						div(class="input-group-prepend")
 							span(class="input-group-text")
 								i(class="#{i}")
-						input(type="#{type}", name="#{name}", id="#{id}", class="form-control", required)
+						input(type="#{type}", name="#{name}", id="#{id}", class="form-control", required, value="#{value}")
 
-			+creationInput("title", "fas fa-heading", "Введите название объявления", "text", "title")
-			+creationInput("description", "fas fa-pen", "Введите описание объявления", "text", "description")
-			+creationInput("price", "fas fa-tag", "Введите цену аренды в день", "number", "price")
-			+creationInput("brand", "fas fa-car", "Введите марку автомобиля", "text", "brand")
-			+creationInput("model", "fas fa-car-side", "Введите модель автомобиля", "text", "model")
+			+creationInput("title", "fas fa-heading", "Введите название объявления", "text", "title", ad.ad_tittle)
+			+creationInput("description", "fas fa-pen", "Введите описание объявления", "text", "description",
+				ad.ad_description)
+			+creationInput("price", "fas fa-tag", "Введите цену аренды в день", "number", "price", ad.ad_price)
+			+creationInput("brand", "fas fa-car", "Введите марку автомобиля", "text", "brand", ad.car_brand)
+			+creationInput("model", "fas fa-car-side", "Введите модель автомобиля", "text", "model", ad.car_model)
 
 			div(class="form-group")
 				label(for="engine") Введите объем двигателя автомобиля
@@ -41,7 +42,8 @@ block content
 						required,
 						min="0",
 						max="9999",
-						step="0.1"
+						step="0.1",
+						value="#{ad.car_engine}"
 					)
 
 			div(class="form-group")
@@ -50,7 +52,8 @@ block content
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="fas fa-tachometer-alt")
-					input(type="number", name="power", id="power", class="form-control", required, min="0", max="9999")
+					input(type="number", name="power", id="power", class="form-control", required, min="0", max="9999",
+						value="#{ad.car_power}")
 
 			div(class="form-group")
 				label(for="year") Введите год выпуска автомобиля
@@ -58,7 +61,8 @@ block content
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="far fa-calendar-check")
-					input(type="number", name="year", id="year", class="form-control", required, min="1900", max="9999")
+					input(type="number", name="year", id="year", class="form-control", required, min="1900", max="9999",
+						value="#{ad.car_year}")
 
 			div(class="form-group")
 				label(for="mileage") Введите пробег автомобиля
@@ -66,7 +70,8 @@ block content
 					div(class="input-group-prepend")
 						span(class="input-group-text")
 							i(class="fas fa-arrows-alt-h")
-					input(type="number", name="mileage", id="mileage", class="form-control", required, min="0")
+					input(type="number", name="mileage", id="mileage", class="form-control", required, min="0",
+						value="#{ad.car_mileage}")
 
 			div.form-group
 				label(for="transmission") Выберите тип коробки передач
@@ -81,6 +86,9 @@ block content
 
 			- var currentDate = moment().format('YYYY-MM-DD');
 			- var nextYear = moment().add(1, 'years').format('YYYY-MM-DD');
+			- var nextDay = moment().add(1, 'days').format('YYYY-MM-DD');
+			- var adDateTo = moment(ad.ad_date_to).format('YYYY-MM-DD');
+			- var adDateFrom = 	moment(ad.ad_date_from).format('YYYY-MM-DD');
 
 			div(class="form-group")
 				label(for="dateFrom") Выберете дату начала аренды
@@ -89,7 +97,7 @@ block content
 						span(class="input-group-text")
 							i(class="far fa-calendar-alt")
 					input(type="date", name="dateFrom", id="dateFrom", class="form-control", required,
-						min="#{currentDate}", max="#{nextYear}")
+						min="#{currentDate}", max="#{nextYear}", value="#{adDateFrom}")
 
 			div(class="form-group")
 				label(for="dateTo") Выберете дату конца аренды
@@ -98,12 +106,12 @@ block content
 						span(class="input-group-text")
 							i(class="far fa-calendar-alt")
 					input(type="date", name="dateTo", id="dateTo", class="form-control", required,
-						min="#{currentDate}", max="#{nextYear}")
+						min="#{nextDay}", max="#{nextYear}", value="#{adDateTo}")
 
 			div(class="alert alert-danger no-coordinates-warn hidden", role="alert")
 				span Пожалуйста, поставьте отметку о расположении автомобиля на карте
-			input(type="text", id="lat", name="lat", hidden)
-			input(type="text", id="lng", name="lng", hidden)
+			input(type="text", id="lat", name="lat", hidden, value="#{ad.ad_lat}")
+			input(type="text", id="lng", name="lng", hidden, value="#{ad.ad_lng}")
 			input(type="submit", name="submit", class="btn btn-primary w-100", value="Создать")
 
 	div(class="map-label") Выберите место расположения автомобиля на карте
@@ -112,5 +120,5 @@ block content
 	script(src="/javascripts/jquery-3.4.1.min.js", type="text/javascript")
 	script(src="/javascripts/popper.min.js", type="text/javascript")
 	script(src="/bootstrap/js/bootstrap.js", type="text/javascript")
-	script(src="/javascripts/create-ad.js", type="text/javascript")
+	script(src="/javascripts/edit-ad.js", type="text/javascript")
 	script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYO3HG7LfuDJU978Vere5V6EVN3IEdsbo&libraries=places&callback=initMap", async, defer)

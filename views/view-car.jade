@@ -13,7 +13,11 @@ block content
 				div(class="col-md-6 col-12")
 					div(class="row pl-3")
 						- if (car[0].ad_author_id == car[0].user_id) {
-							a(href="/cars/edit-car/#{car[0].ad_id}") Редактировать объявление
+							a(href="/cars/view-car/edit/#{car[0].ad_id}") Редактировать объявление
+						- };
+					div(class="row pl-3")
+						- if (car[0].ad_author_id == car[0].user_id) {
+							a(href="/cars/view-car/delete/#{car[0].ad_id}") Удалить объявление
 						- };
 					div(class="row pl-3")
 						h4= car[0].ad_tittle
@@ -40,20 +44,10 @@ block content
 						div(class="col-md-4 col-12")
 							p(class="border-secondary border-bottom") #[i(class="fas fa-cog")] Коробка передач
 						div(class="col-md-8 col-12")
-							- if(car[0].car_transmition_id == 1)
-								p Механическая
-							- else
-								- if (car[0].car_transmition_id == 2)
-									p Автоматическая
-								- else
-									p Другая
+							p= car[0].car_transmission
 
 					+info("Можно арендовать", "с " + car[0].ad_date_from + " по " + car[0].ad_date_to, "far fa-calendar-alt")
-					//div(class="row")
-					//	div(class="col-4")
-					//		p(class="border-secondary border-bottom") Можно арендовать
-					//	div(class="col-8")
-					//		p период
+
 
 		div.description
 			p= car[0].ad_description
