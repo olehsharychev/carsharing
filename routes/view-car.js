@@ -46,7 +46,7 @@ router.get('/:ad_id', authentication, function(req, res, next) {
                 car[car.length] = {images: result};
 
                 // получение всех заявок к объявлению
-                var bidQuery = `SELECT bid.*, user.user_login from bid
+                var bidQuery = `SELECT bid.*, user.user_login, user.user_id from bid
                                 left join user on user.user_id = bid.bid_author_id
                                 where bid.ad_id = ${adId}`;
                 con.query(bidQuery, function (err, result, fields) {
@@ -60,7 +60,7 @@ router.get('/:ad_id', authentication, function(req, res, next) {
 
                     // получение списка комментариев
                     // подсчет непрочитанных сообщений
-                    var comMesQuery = `SELECT comment.*, user.user_login FROM comment 
+                    var comMesQuery = `SELECT comment.*, user.user_login, user.user_id FROM comment 
                                          LEFT JOIN user ON user.user_id = comment.comment_author_id
                                          WHERE comment_ad_id = ${adId};
                                          SELECT COUNT(message_unread) AS amount_unread FROM message WHERE
