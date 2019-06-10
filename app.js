@@ -71,7 +71,7 @@ passport.use('local', new localStrategy({
 
 
         if (!login || !password) {
-            return done(null, false, req.flash('message', 'All fields are required.'));
+            return done(null, false, req.flash('message', 'Все поля должны быть заполнены!'));
         }
 
         var salt = '7fa73b47df808d36c5fe328546ddef8b9011b2c6';
@@ -81,7 +81,7 @@ passport.use('local', new localStrategy({
             if (err) return done(req.flash('message', err));
 
             if (!rows.length) {
-                return done(null, false, req.flash('message', 'Invalid username or password.'));
+                return done(null, false, req.flash('message', 'Неправильное имя пользователя или пароль!'));
             }
 
             salt = salt + '' + password;
@@ -94,7 +94,7 @@ passport.use('local', new localStrategy({
 
             if (!(dbPassword == encPassword)) {
                 console.log('error');
-                return done(null, false, req.flash('message', 'Invalid username or password.'));
+                return done(null, false, req.flash('message', 'Неправильное имя пользователя или пароль!'));
 
             }
 
@@ -134,7 +134,8 @@ app.post("/signin", passport.authenticate('local', {
 
 }), function(req, res, info){
 
-    res.render('login',{'message' :req.flash('message')});
+    res.redirect('/login');
+    //res.render('login',{message: req.flash('message')});
 });
 
 app.use('/', indexRouter);

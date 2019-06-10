@@ -55,14 +55,22 @@ router.post('/register', upload.single('userPhoto'), function (req, res) {
                 (NULL, 
                 ${req.body.role}, 
                 '${req.body.login}',
-                '${getHash(req.body.password)}',
-                '${req.file.filename}',
-                '${req.body.firstName}',
-                '${req.body.surname}',
-                '${req.body.email}',
-                '${req.body.telnum}',
-                '${req.body.cardnum}',
-                0)`;
+                '${getHash(req.body.password)}',`;
+
+            if (req.file) {
+                query += `'${req.file.filename}',`;
+            }
+            else {
+                query += `'no_photo.png',`;
+            }
+
+            query += `'${req.body.firstName}',
+                      '${req.body.surname}',
+                      '${req.body.email}',
+                      '${req.body.telnum}',
+                      '${req.body.cardnum}',
+                      0)`;
+
 
             console.log(query);
             con.query(query, function (err) {
